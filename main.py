@@ -1,3 +1,4 @@
 import flet as ft
 
-print
+def main(page: ft.Page):
+    
