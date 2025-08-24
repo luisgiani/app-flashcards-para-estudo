@@ -5,7 +5,7 @@ def main(page: ft.Page):
     page.window.resizable = False
     page.window.width = 730
     page.window.height = 920
-    page.title = 'Calculadora'
+    page.title = 'Flashcards'
     page.window.always_on_top = True
 
 
