@@ -8,4 +8,6 @@ def main(page: ft.Page):
     page.title = 'Calculadora'
     page.window.always_on_top = True
 
+
+
 ft.app(target=main)
