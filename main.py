@@ -9,5 +9,5 @@ def main(page: ft.Page):
     page.window.always_on_top = True
 
 
-.
+
 ft.app(target=main)
