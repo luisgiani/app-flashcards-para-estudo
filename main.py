@@ -24,14 +24,39 @@ def main(page: ft.Page):
     page.vertical_alignment = 'center'
     page.horizontal_alignment = 'center'
 
+    def login(e):
+        try:
+            auth.sign_in_with_email_and_password(email.value, senha.value)
+            snackbar = ft.SnackBar(
+                content=ft.Text("Logado com sucesso!"),
+                bgcolor="green",
+                duration=3000,
+                action="OK"
+            )
+
+        except:
+            snackbar = ft.SnackBar(
+                content=ft.Text("Email e/ou senha incorretos!"),
+                bgcolor="red",
+                duration=3000,
+                action="OK"
+            )
+
+        page.open(snackbar)
+        email.value = None
+        senha.value = None
+        page.update()
+
     titulo = ft.Text(value='Login', size=40)
 
     email = ft.TextField(label='Email', text_size=26, width=600, border_color='white', ) 
 
     senha = ft.TextField(label='Senha', text_size=26, width=600, password=True, can_reveal_password= True, border_color='white') 
 
-    botao = ft.ElevatedButton(text='Entrar', color='black', width= 200, bgcolor='white')
+    botao = ft.ElevatedButton(text='Entrar', color='black', width= 200, bgcolor='white', on_click=login)
 
-    page.add(titulo, email, senha, botao)
+    msg_registro = ft.Text(value='Caso não tenha uma conta, Clique em Registrar Conta para cria-la!', size=12)
+
+    page.add(titulo, email, senha, botao, msg_registro)
 
 ft.app(main)
