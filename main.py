@@ -16,34 +16,22 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 def main(page: ft.Page):
-    page.title = "Projetinho teste"
+    page.title = 'Flashcards'
     page.window.width = 830
     page.window.height = 800
-    page.bgcolor = "gray"
+    page.bgcolor = 'dark'
     page.spacing = 20
     page.vertical_alignment = 'center'
     page.horizontal_alignment = 'center'
 
-    titulo = ft.Text(
-        value="Teste",
-        size= 32
-    )
+    titulo = ft.Text(value='Login', size=40)
 
-    texto =  ft.Text(value="Qual é a cor de plano de fundo?", 
-                color="white", 
-                size= 20, 
-                )
+    email = ft.TextField(label='Email', text_size=26, width=600, border_color='white', ) 
 
-    digitar = ft.TextField(label="Digite aqui a sua resposta:", 
-                     text_size=20
-                     )
+    senha = ft.TextField(label='Senha', text_size=26, width=600, password=True, can_reveal_password= True, border_color='white') 
 
-    
-    btn = ft.ElevatedButton(
-            text="Responder", 
-           # on_click= valida_resposta(digitar)
-            )
+    botao = ft.ElevatedButton(text='Entrar', color='black', width= 200, bgcolor='white')
 
-    page.add(titulo, texto, digitar, btn)
+    page.add(titulo, email, senha, botao)
 
 ft.app(main)
