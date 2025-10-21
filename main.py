@@ -23,6 +23,11 @@ def main(page: ft.Page):
     page.spacing = 20
     page.vertical_alignment = 'center'
     page.horizontal_alignment = 'center'
+    
+    def rota_registro(e):
+        page.route = '/registro'
+        page.update()
+
 
     def login(e):
         try:
@@ -47,15 +52,39 @@ def main(page: ft.Page):
         senha.value = None
         page.update()
 
-    titulo = ft.Text(value='Login', size=40)
+    titulo = ft.Text(
+        value='Login', 
+        size=40
+        )
 
-    email = ft.TextField(label='Email', text_size=26, width=600, border_color='white', ) 
+    email = ft.TextField(
+        label='Email', 
+        text_size=26, 
+        width=600, 
+        border_color='white'
+        ) 
 
-    senha = ft.TextField(label='Senha', text_size=26, width=600, password=True, can_reveal_password= True, border_color='white') 
+    senha = ft.TextField(
+        label='Senha', 
+        text_size=26, 
+        width=600, 
+        password=True, 
+        can_reveal_password= True, 
+        border_color='white'
+        ) 
 
-    botao = ft.ElevatedButton(text='Entrar', color='black', width= 200, bgcolor='white', on_click=login)
+    botao = ft.ElevatedButton(
+        text='Entrar', 
+        color='black', 
+        width= 200, 
+        bgcolor='white', 
+        on_click=login
+        )
 
-    msg_registro = ft.Text(value='Caso não tenha uma conta, Clique em Registrar Conta para cria-la!', size=12)
+    msg_registro = ft.TextButton(
+        text='Criar conta', 
+        on_click=rota_registro,
+        )
 
     page.add(titulo, email, senha, botao, msg_registro)
 
