@@ -25,9 +25,42 @@ def main(page: ft.Page):
     page.horizontal_alignment = 'center'
     
     def rota_registro(e):
-        page.route = '/registro'
+        page.views.clear()
+        page.views.append(
+            ft.View(
+                    '/',
+                    [
+                        ft.AppBar(title=ft.Text('Flet app'),
+                                bgcolor='dark',
+                                ),
+                        ft.ElevatedButton('Vá para o registro', on_click=lambda _: page.go('/registro'))
+                    ]
+                )
+        )
+
+        if page.route == '/registro':
+            page.views.append(
+                ft.View(
+                    '/registro',
+                    [
+                        ft.AppBar(
+                            title=ft.Text('Registro'), 
+                            bgcolor='dark'
+                            ),
+                            ft.ElevatedButton('Página inicial', on_click=lambda _: page.go('/'))
+                    ]
+                )
+            )
+
         page.update()
 
+    def view_pop(view):
+        page.views.pop()
+        top_view = page.views[-1]
+        page.go(top_view.route)
+        
+        page.on_view_pop = view_pop
+        page.go(page.route)
 
     def login(e):
         try:
