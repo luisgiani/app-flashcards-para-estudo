@@ -31,7 +31,7 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View('/login',
                         [
-                        titulo_login, email_login, senha_login, botao_login, voltar_registro
+                        titulo_login, email_login, senha_login, botao_login, voltar_registro, pular_login
                         ],
                         vertical_alignment= 'center',
                         horizontal_alignment= 'center'
@@ -53,11 +53,10 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        baralho
+                        titulo_baralhos,baralho
                     ]
                 )
             )
-
 
         page.update()
 
@@ -178,10 +177,23 @@ def main(page: ft.Page):
             on_click=lambda _: page.go('/login')
             )
     
+    pular_login = ft.TextButton(
+            text='Pular Login', 
+            on_click=lambda _: page.go('/principal')
+            )
+    
+    titulo_baralhos = ft.Text(
+        value='Baralhos', 
+        size= 40
+    )
+
     baralho = ft.Container(
-        ft.Text('teste'),
+        content=ft.Text('teste'),
         height=200,
-        width=200
+        width=200,
+        bgcolor='blue',
+        border_radius= 50,
+        padding=80,
     )
 
     page.go('/login')
