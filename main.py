@@ -27,10 +27,11 @@ def main(page: ft.Page):
     def mudar_tela(e):
         page.views.clear()
         if page.route == '/login':
+
             page.views.append(
                 ft.View('/login',
                         [
-                        titulo_login, email, senha, botao_login, msg_registro
+                        titulo_login, email_login, senha_login, botao_login, voltar_registro
                         ],
                         vertical_alignment= 'center',
                         horizontal_alignment= 'center'
@@ -41,26 +42,61 @@ def main(page: ft.Page):
                 ft.View(
                     '/registro',
                     [
-                        titulo_registro, email, senha, botao_registrar, msg_login
+                        titulo_registro, email_registro, senha_registro, botao_registrar, voltar_login
                     ],
                     vertical_alignment= 'center',
                     horizontal_alignment= 'center'
                 )
             )
+        elif page.route == '/principal':
+            page.views.append(
+                ft.View(
+                    '/principal',
+                    [
+                        baralho
+                    ]
+                )
+            )
+
 
         page.update()
 
     page.on_route_change = mudar_tela
 
+    def registrar(e):
+        try:
+            auth.create_user_with_email_and_password(email_registro.value, senha_registro.value)
+            snackbar = ft.SnackBar(
+                content=ft.Text("Conta criada com sucesso!"),
+                bgcolor="green",
+                duration=3000,
+                action="OK"
+            )
+
+        except:
+            snackbar = ft.SnackBar(
+                content=ft.Text("Algo deu errado!"),
+                bgcolor="red",
+                duration=3000,
+                action="OK"
+            )
+
+        page.open(snackbar)
+        email_registro.value = None
+        senha_registro.value = None
+        page.update()
+
     def login(e):
         try:
-            auth.sign_in_with_email_and_password(email.value, senha.value)
+            auth.sign_in_with_email_and_password(email_login.value, senha_login.value)
             snackbar = ft.SnackBar(
                 content=ft.Text("Logado com sucesso!"),
                 bgcolor="green",
                 duration=3000,
                 action="OK"
             )
+
+            page.go('/principal')
 
         except:
             snackbar = ft.SnackBar(
@@ -71,14 +107,9 @@ def main(page: ft.Page):
             )
 
         page.open(snackbar)
-        email.value = None
-        senha.value = None
+        email_login.value = None
+        senha_login.value = None
         page.update()
-
-    def registrar(e):
-        pass
-        page.update()
-
     
     titulo_login = ft.Text(
             value='Login', 
@@ -89,14 +120,30 @@ def main(page: ft.Page):
             size=40
             )
 
-    email = ft.TextField(
+    email_login = ft.TextField(
             label='Email', 
             text_size=26, 
             width=600, 
             border_color='white'
             ) 
 
-    senha = ft.TextField(
+    senha_login = ft.TextField(
+            label='Senha', 
+            text_size=26, 
+            width=600, 
+            password=True, 
+            can_reveal_password= True, 
+            border_color='white'
+            ) 
+    
+    email_registro = ft.TextField(
+            label='Email', 
+            text_size=26, 
+            width=600, 
+            border_color='white'
+            ) 
+
+    senha_registro = ft.TextField(
             label='Senha', 
             text_size=26, 
             width=600, 
@@ -121,15 +168,21 @@ def main(page: ft.Page):
             on_click=registrar
             )
 
-    msg_registro = ft.TextButton(
+    voltar_registro = ft.TextButton(
             text='Criar conta', 
             on_click=lambda _: page.go('/registro'),
             )
 
-    msg_login = ft.TextButton(
+    voltar_login = ft.TextButton(
             text='Voltar ao Login', 
             on_click=lambda _: page.go('/login')
             )
+    
+    baralho = ft.Container(
+        ft.Text('teste'),
+        height=200,
+        width=200
+    )
 
     page.go('/login')
 
