@@ -31,7 +31,9 @@ def main(page: ft.Page):
                 ft.View('/login',
                         [
                         titulo_login, email, senha, botao_login, msg_registro
-                        ]
+                        ],
+                        vertical_alignment= 'center',
+                        horizontal_alignment= 'center'
                 )
             )
         elif page.route == '/registro':
@@ -40,7 +42,9 @@ def main(page: ft.Page):
                     '/registro',
                     [
                         titulo_registro, email, senha, botao_registrar, msg_login
-                    ]
+                    ],
+                    vertical_alignment= 'center',
+                    horizontal_alignment= 'center'
                 )
             )
 
