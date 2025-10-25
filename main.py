@@ -113,6 +113,8 @@ def main(page: ft.Page):
     def adicionar_baralho(e):
         pass
 
+    def visualizar_baralho(e):
+        pass
     
     titulo_login = ft.Text(
             value='Login', 
@@ -197,17 +199,21 @@ def main(page: ft.Page):
         width=200,
         bgcolor='blue',
         border_radius= 50,
-        padding=80,
+        alignment= ft.alignment.center,
+        ink=True,
+        on_click=visualizar_baralho
     )
 
     container_novo_baralho = ft.Container(
-        content=ft.Text('+', size=50, text_align='center'),
+        content=ft.Icon(name='ADD', size=50),
         height=200,
         width=200,
-        bgcolor='red',
+        bgcolor='dark',
         border_radius= 50,
         ink=True,
-        on_click=adicionar_baralho
+        on_click=adicionar_baralho,
+        alignment= ft.alignment.center,
+        border= ft.border.all(1, color='white')
     )
 
     page.go('/login')
