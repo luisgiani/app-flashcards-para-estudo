@@ -9,7 +9,7 @@ firebaseConfig = {
   'databaseURL': "https:flashcards.firebaseio.com",
   'messagingSenderId': "127324130613",
   'appId': "1:127324130613:web:6fe76a0a2d1ceb3b42507c",
-  'measurementId': "G-5RVMDT9WWF"
+  'measurementId': "G-5RVMDT9WWF" a
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
