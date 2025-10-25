@@ -53,7 +53,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        titulo_baralhos,baralho
+                        titulo_baralhos, ft.Row(controls=[container_baralho, container_novo_baralho])
                     ]
                 )
             )
@@ -109,6 +109,10 @@ def main(page: ft.Page):
         email_login.value = None
         senha_login.value = None
         page.update()
+
+    def adicionar_baralho(e):
+        pass
+
     
     titulo_login = ft.Text(
             value='Login', 
@@ -187,13 +191,23 @@ def main(page: ft.Page):
         size= 40
     )
 
-    baralho = ft.Container(
+    container_baralho = ft.Container(
         content=ft.Text('teste'),
         height=200,
         width=200,
         bgcolor='blue',
         border_radius= 50,
         padding=80,
+    )
+
+    container_novo_baralho = ft.Container(
+        content=ft.Text('+', size=50, text_align='center'),
+        height=200,
+        width=200,
+        bgcolor='red',
+        border_radius= 50,
+        ink=True,
+        on_click=adicionar_baralho
     )
 
     page.go('/login')
