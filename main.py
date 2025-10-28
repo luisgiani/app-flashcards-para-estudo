@@ -42,7 +42,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/registro',
                     [
-                        titulo_registro, email_registro, senha_registro, botao_registrar, voltar_login
+                        titulo_registro, usuario_registro, email_registro, senha_registro, botao_registro, voltar_login
                     ],
                     vertical_alignment= 'center',
                     horizontal_alignment= 'center'
@@ -156,6 +156,13 @@ def main(page: ft.Page):
             can_reveal_password= True, 
             border_color='white'
             ) 
+    
+    usuario_registro = ft.TextField(
+        label='Nome do usuário',
+        text_size=26,
+        width=600,
+        border_color='white'
+    )
 
     botao_login = ft.ElevatedButton(
             text='Entrar', 
@@ -165,7 +172,7 @@ def main(page: ft.Page):
             on_click=login
             )
 
-    botao_registrar = ft.ElevatedButton(
+    botao_registro = ft.ElevatedButton(
             text='Registrar', 
             color='black', 
             width= 200, 
@@ -195,7 +202,7 @@ def main(page: ft.Page):
     )
 
     container_baralho = ft.Container(
-        content=ft.Text('teste'),
+        content=ft.Text('Programação', size=18),
         height=200,
         width=200,
         bgcolor='blue',
