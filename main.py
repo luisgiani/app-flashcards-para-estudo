@@ -53,7 +53,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        titulo_baralhos, stats_inicio, pesquisa, ft.Row(controls=[container_baralho, container_novo_baralho])
+                        titulo_baralhos, stats_inicio, pesquisa, grid_baralhos
                     ]
                 )
             )
@@ -215,6 +215,14 @@ def main(page: ft.Page):
         on_click=adicionar_baralho,
         alignment= ft.alignment.center,
         border= ft.border.all(1, color='white')
+    )
+
+    grid_baralhos = ft.GridView(
+        controls=[
+            container_baralho,container_novo_baralho
+        ],
+        expand= True,
+        max_extent=200
     )
 
     stats_inicio = ft.Container(
