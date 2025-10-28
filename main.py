@@ -262,7 +262,7 @@ def main(page: ft.Page):
                     expand= 1,
                     border_radius=10,
                 ),
-                ft.Container(
+                ft.Container(a
                     content=ft.Column(
                         controls=[
                             ft.Text(
