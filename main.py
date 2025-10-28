@@ -53,7 +53,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        titulo_baralhos, ft.Row(controls=[container_baralho, container_novo_baralho])
+                        titulo_baralhos, stats_inicio, pesquisa, ft.Row(controls=[container_baralho, container_novo_baralho])
                     ]
                 )
             )
@@ -189,8 +189,9 @@ def main(page: ft.Page):
             )
     
     titulo_baralhos = ft.Text(
-        value='Baralhos', 
-        size= 40
+        value='Meus Baralhos', 
+        size= 40,
+        weight='bold'
     )
 
     container_baralho = ft.Container(
@@ -198,7 +199,7 @@ def main(page: ft.Page):
         height=200,
         width=200,
         bgcolor='blue',
-        border_radius= 50,
+        border_radius= 30,
         alignment= ft.alignment.center,
         ink=True,
         on_click=visualizar_baralho
@@ -208,13 +209,93 @@ def main(page: ft.Page):
         content=ft.Icon(name='ADD', size=50),
         height=200,
         width=200,
-        bgcolor='dark',
-        border_radius= 50,
+        bgcolor='2A2A2A',
+        border_radius= 30,
         ink=True,
         on_click=adicionar_baralho,
         alignment= ft.alignment.center,
         border= ft.border.all(1, color='white')
     )
+
+    stats_inicio = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(
+                                '20', 
+                                size=24,
+                                weight='bold'
+                                ),
+                            ft.Text(
+                                'Baralhos', 
+                                size=14
+                                )
+                        ],
+                        alignment= 'center',
+                        horizontal_alignment='center'
+                    ),
+                    bgcolor='blue',
+                    padding=15,
+                    expand= 1,
+                    border_radius=10,
+                ),
+                ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(
+                                '144', 
+                                size=24,
+                                weight='bold'
+                                ),
+                            ft.Text(
+                                'Cards', 
+                                size=14
+                                )
+                        ],
+                        alignment= 'center',
+                        horizontal_alignment='center'
+                    ),
+                    bgcolor='green',
+                    padding=15,
+                    expand= 1,
+                    border_radius=10,
+                ),
+                ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(
+                                '24', 
+                                size=24,
+                                weight='bold'
+                                ),
+                            ft.Text(
+                                'Para Revisar', 
+                                size=14
+                                )
+                        ],
+                        alignment= 'center',
+                        horizontal_alignment='center'
+                    ),
+                    bgcolor='red',
+                    padding=15,
+                    expand= 1,
+                    border_radius=10,
+                )
+            ]
+        ),
+    )
+
+    pesquisa = ft.Container(
+        content=ft.TextField(
+                hint_text='Pesquisar Baralhos', 
+                prefix_icon='SEARCH',
+                filled=True
+                ), 
+            border_radius=10
+        )
+
 
     page.go('/login')
 
