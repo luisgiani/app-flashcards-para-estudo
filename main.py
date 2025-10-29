@@ -310,6 +310,8 @@ def main(page: ft.Page):
                 ), 
             border_radius=10
         )
+    
+    barra_lateral = ft.NavigationRail()
 
 
     page.go('/login')
