@@ -17,10 +17,10 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 conexao = mysql.connector.connect(
-    host='localhost',          # Ou IP do servidor
-    user='root',        # Usuário do MySQL
-    password='',      # Senha do MySQL
-    database='flashcards'      # Nome do banco
+    host='localhost',
+    user='root',
+    password='', 
+    database='flashcards'
 )
 cursor = conexao.cursor()
 
@@ -36,7 +36,6 @@ def main(page: ft.Page):
     def mudar_tela(e):
         page.views.clear()
         if page.route == '/login':
-
             page.views.append(
                 ft.View('/login',
                         [
@@ -74,7 +73,7 @@ def main(page: ft.Page):
 
     page.on_route_change = mudar_tela
 
-    def registrar(e):
+    def registrar():
         try:
             cursor.execute('insert into usuarios (nome_usuario, email, senha) values (%s, %s, %s)', (usuario_registro.value, email_registro.value, senha_registro.value))
             auth.create_user_with_email_and_password(email_registro.value, senha_registro.value)
@@ -101,7 +100,7 @@ def main(page: ft.Page):
         senha_registro.value = None
         page.update()
 
-    def login(e):
+    def login():
         try:
             auth.sign_in_with_email_and_password(email_login.value, senha_login.value)
             snackbar = ft.SnackBar(
@@ -128,10 +127,10 @@ def main(page: ft.Page):
         senha_login.value = None
         page.update()
 
-    def adicionar_baralho(e):
+    def adicionar_baralho():
         pass
 
-    def visualizar_baralho(e):
+    def visualizar_baralho():
         pass
     
     titulo_login = ft.Text(
@@ -180,7 +179,7 @@ def main(page: ft.Page):
         text_size=26,
         width=600,
         border_color='white'
-    )
+        )
 
     botao_login = ft.ElevatedButton(
             text='Entrar', 
