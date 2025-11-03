@@ -1,5 +1,6 @@
 import flet as ft
 import pyrebase
+import sqlite3
 
 firebaseConfig = {
   'apiKey': "AIzaSyAd6Aw-9lhIr2FLFeeM-x2cn_6QJ5Z8OGg",
@@ -14,6 +15,8 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
+conexao = sqlite3.connect('flashcards')
+cursor = sqlite3.Cursor()
 
 def main(page: ft.Page):
     page.title = 'Flashcards'
@@ -72,6 +75,8 @@ def main(page: ft.Page):
                 action="OK"
             )
 
+            cursor.execute(f'Insert into usuarios (nome_usuario, email, senha) values ({usuario_registro.value}, {email_registro.value}, {senha_registro.value})')
+            conexao.commit()
         except:
             snackbar = ft.SnackBar(
                 content=ft.Text("Algo deu errado!"),
