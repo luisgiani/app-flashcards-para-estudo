@@ -15,8 +15,8 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
-conexao = sqlite3.connect('flashcards')
-cursor = sqlite3.Cursor()
+conexao = sqlite3.connect('flashcards.db', check_same_thread=True)
+cursor = conexao.cursor()
 
 def main(page: ft.Page):
     page.title = 'Flashcards'
@@ -61,6 +61,9 @@ def main(page: ft.Page):
                 )
             )
 
+        usuario_registro.value = None
+        email_login.value = None
+        senha_login.value = None
         page.update()
 
     page.on_route_change = mudar_tela
@@ -77,15 +80,17 @@ def main(page: ft.Page):
 
             cursor.execute(f'Insert into usuarios (nome_usuario, email, senha) values ({usuario_registro.value}, {email_registro.value}, {senha_registro.value})')
             conexao.commit()
-        except:
+        except Exception as error:
+            print(f"Erro no registro: {error}")
             snackbar = ft.SnackBar(
-                content=ft.Text("Algo deu errado!"),
+                content=ft.Text(f"Erro: {str(error)}"),
                 bgcolor="red",
-                duration=3000,
+                duration= 10000,
                 action="OK"
             )
 
         page.open(snackbar)
+        usuario_registro.value = None
         email_registro.value = None
         senha_registro.value = None
         page.update()
@@ -102,15 +107,17 @@ def main(page: ft.Page):
 
             page.go('/principal')
 
-        except:
+        except Exception as error:
+            print(f"Erro no login: {error}")
             snackbar = ft.SnackBar(
-                content=ft.Text("Email e/ou senha incorretos!"),
+                content=ft.Text(f"Erro: {str(error)}"),
                 bgcolor="red",
-                duration=3000,
+                duration=10000,
                 action="OK"
             )
 
         page.open(snackbar)
+        usuario_registro.value = None
         email_login.value = None
         senha_login.value = None
         page.update()
