@@ -1,6 +1,6 @@
 import flet as ft
 import pyrebase
-import sqlite3
+import mysql.connector
 
 firebaseConfig = {
   'apiKey': "AIzaSyAd6Aw-9lhIr2FLFeeM-x2cn_6QJ5Z8OGg",
@@ -15,7 +15,13 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
-conexao = sqlite3.connect('flashcards.db', check_same_thread=True)
+
+conexao = mysql.connector.connect(
+    host='localhost',          # Ou IP do servidor
+    user='root',        # Usuário do MySQL
+    password='',      # Senha do MySQL
+    database='flashcards'      # Nome do banco
+)
 cursor = conexao.cursor()
 
 def main(page: ft.Page):
@@ -70,7 +76,9 @@ def main(page: ft.Page):
 
     def registrar(e):
         try:
+            cursor.execute('insert into usuarios (nome_usuario, email, senha) values (%s, %s, %s)', (usuario_registro.value, email_registro.value, senha_registro.value))
             auth.create_user_with_email_and_password(email_registro.value, senha_registro.value)
+            conexao.commit()
             snackbar = ft.SnackBar(
                 content=ft.Text("Conta criada com sucesso!"),
                 bgcolor="green",
@@ -78,8 +86,6 @@ def main(page: ft.Page):
                 action="OK"
             )
 
-            cursor.execute(f'Insert into usuarios (nome_usuario, email, senha) values ({usuario_registro.value}, {email_registro.value}, {senha_registro.value})')
-            conexao.commit()
         except Exception as error:
             print(f"Erro no registro: {error}")
             snackbar = ft.SnackBar(
