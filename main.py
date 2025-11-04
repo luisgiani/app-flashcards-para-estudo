@@ -15,7 +15,6 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
-usuario_logado = ''
 
 conexao = mysql.connector.connect(
     host='localhost',
@@ -62,7 +61,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        ft.Row(titulo_baralhos, usuario_atual), stats_inicio, pesquisa, grid_baralhos
+                        ft.Row(controls=[titulo_baralhos, ft.Text(f'meu usuário atual é : {usuario_logado}', color='white')]), stats_inicio, pesquisa, grid_baralhos
                     ]
                 )
             )
@@ -103,16 +102,18 @@ def main(page: ft.Page):
 
     def login(e):
         try:
+            nonlocal usuario_logado
             auth.sign_in_with_email_and_password(email_login.value, senha_login.value)
+            cursor.execute('select id_usuario from usuarios where email = %s',(email_login.value,))
+            retorno = cursor.fetchone()
+            usuario_logado =retorno[0]
+
             snackbar = ft.SnackBar(
                 content=ft.Text("Logado com sucesso!"),
                 bgcolor="green",
                 duration=3000,
                 action="OK"
             )
-
-            usuario_logado = cursor.execute('select id_usuario from usuarios where email = "%s"',(email_login.value))
-
             page.go('/principal')
 
         except Exception as error:
@@ -129,13 +130,14 @@ def main(page: ft.Page):
         email_login.value = ''
         senha_login.value = ''
         page.update()
-        return usuario_logado
 
     def adicionar_baralho(e):
         pass
 
     def visualizar_baralho(e):
         pass
+
+    usuario_logado = ''
     
     titulo_login = ft.Text(
             value='Login', 
@@ -221,8 +223,6 @@ def main(page: ft.Page):
         size= 40,
         weight='bold'
     )
-
-    usuario_atual = ft.Text(usuario_logado)
 
     container_baralho = ft.Container(
         content=ft.Text('Programação', size=18),
@@ -328,7 +328,7 @@ def main(page: ft.Page):
     pesquisa = ft.Container(
         content=ft.TextField(
                 hint_text='Pesquisar Baralhos', 
-                prefix_icon='SEARCH',
+                prefix_icon=ft.Icons.SEARCH,
                 filled=True
                 ), 
             border_radius=10
