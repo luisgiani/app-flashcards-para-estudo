@@ -15,6 +15,7 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
+usuario_logado = ''
 
 conexao = mysql.connector.connect(
     host='localhost',
@@ -61,19 +62,19 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        titulo_baralhos, stats_inicio, pesquisa, grid_baralhos
+                        ft.Row(titulo_baralhos, usuario_atual), stats_inicio, pesquisa, grid_baralhos
                     ]
                 )
             )
 
-        usuario_registro.value = None
-        email_login.value = None
-        senha_login.value = None
+        usuario_registro.value = ''
+        email_login.value = ''
+        senha_login.value = ''
         page.update()
 
     page.on_route_change = mudar_tela
 
-    def registrar():
+    def registrar(e):
         try:
             cursor.execute('insert into usuarios (nome_usuario, email, senha) values (%s, %s, %s)', (usuario_registro.value, email_registro.value, senha_registro.value))
             auth.create_user_with_email_and_password(email_registro.value, senha_registro.value)
@@ -95,12 +96,12 @@ def main(page: ft.Page):
             )
 
         page.open(snackbar)
-        usuario_registro.value = None
-        email_registro.value = None
-        senha_registro.value = None
+        usuario_registro.value = ''
+        email_registro.value = ''
+        senha_registro.value = ''
         page.update()
 
-    def login():
+    def login(e):
         try:
             auth.sign_in_with_email_and_password(email_login.value, senha_login.value)
             snackbar = ft.SnackBar(
@@ -109,6 +110,8 @@ def main(page: ft.Page):
                 duration=3000,
                 action="OK"
             )
+
+            usuario_logado = cursor.execute('select id_usuario from usuarios where email = "%s"',(email_login.value))
 
             page.go('/principal')
 
@@ -122,15 +125,16 @@ def main(page: ft.Page):
             )
 
         page.open(snackbar)
-        usuario_registro.value = None
-        email_login.value = None
-        senha_login.value = None
+        usuario_registro.value = ''
+        email_login.value = ''
+        senha_login.value = ''
         page.update()
+        return usuario_logado
 
-    def adicionar_baralho():
+    def adicionar_baralho(e):
         pass
 
-    def visualizar_baralho():
+    def visualizar_baralho(e):
         pass
     
     titulo_login = ft.Text(
@@ -217,6 +221,8 @@ def main(page: ft.Page):
         size= 40,
         weight='bold'
     )
+
+    usuario_atual = ft.Text(usuario_logado)
 
     container_baralho = ft.Container(
         content=ft.Text('Programação', size=18),
