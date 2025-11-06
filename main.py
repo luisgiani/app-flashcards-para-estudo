@@ -131,6 +131,24 @@ def main(page: ft.Page):
         senha_login.value = ''
         page.update()
 
+    def listar_baralhos(e):
+        cursor.execute('select * from baralhos where id_usuario = %s',(usuario_logado,))
+        lista_baralhos = cursor.fetchall()
+
+        for baralho in lista_baralhos:
+            container_baralho = ft.Container(
+                content= ft.Text(baralho[2], size=18),
+                height=200,
+                width=200,
+                bgcolor='blue',
+                border_radius= 30,
+                alignment= ft.alignment.center,
+                ink=True,
+                on_click=visualizar_baralho
+                )
+            
+            grid_baralhos.controls.append(container_baralho)
+
     def adicionar_baralho(e):
         pass
 
@@ -224,17 +242,6 @@ def main(page: ft.Page):
         weight='bold'
     )
 
-    container_baralho = ft.Container(
-        content=ft.Text('Programação', size=18),
-        height=200,
-        width=200,
-        bgcolor='blue',
-        border_radius= 30,
-        alignment= ft.alignment.center,
-        ink=True,
-        on_click=visualizar_baralho
-    )
-
     container_novo_baralho = ft.Container(
         content=ft.Icon(name='ADD', size=50),
         height=200,
@@ -249,7 +256,7 @@ def main(page: ft.Page):
 
     grid_baralhos = ft.GridView(
         controls=[
-            container_baralho,container_novo_baralho
+            container_novo_baralho
         ],
         expand= True,
         max_extent=200
