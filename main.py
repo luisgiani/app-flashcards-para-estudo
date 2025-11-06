@@ -151,7 +151,23 @@ def main(page: ft.Page):
             grid_baralhos.controls.append(container_baralho)
 
     def adicionar_baralho(e):
-        pass
+        try:
+            ft.AlertDialog()
+
+            cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho, desc_baralho))
+            cursor.commit()
+
+        except Exception as error:
+            print(f"Erro no login: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+
+        page.open(snackbar)
+        page.update()
 
     def visualizar_baralho(e):
         pass
