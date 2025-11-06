@@ -154,11 +154,11 @@ def main(page: ft.Page):
         try:
             ft.AlertDialog()
 
-            cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho, desc_baralho))
+            cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
             cursor.commit()
 
         except Exception as error:
-            print(f"Erro no login: {error}")
+            print(f"Erro no processo: {error}")
             snackbar = ft.SnackBar(
                 content=ft.Text(f"Erro: {str(error)}"),
                 bgcolor="red",
@@ -173,6 +173,18 @@ def main(page: ft.Page):
         pass
 
     usuario_logado = ''
+
+    nome_baralho = ft.TextField(
+        label='Nome do baralho', 
+        text_size=24,
+        border_color='white'
+        )
+
+    desc_baralho = ft.TextField(
+        label='Descrição do baralho', 
+        text_size=24,
+        border_color='white'
+        )
     
     titulo_login = ft.Text(
             value='Login', 
