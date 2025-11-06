@@ -57,6 +57,7 @@ def main(page: ft.Page):
                 )
             )
         elif page.route == '/principal':
+            listar_baralhos(e)
             page.views.append(
                 ft.View(
                     '/principal',
