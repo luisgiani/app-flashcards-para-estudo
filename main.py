@@ -74,20 +74,9 @@ def main(page: ft.Page):
 
     page.on_route_change = mudar_tela
 
-    def operacao_cancelada(e):
-        snackbar = ft.SnackBar(
-                    content=ft.Text(f"Operação cancelada"),
-                    bgcolor="red",
-                    duration=4000,
-                    action="OK"
-                )
-        
-        page.open(snackbar)
-        page.update()
-
     def insert_novo_baralho(e):
         cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
-        cursor.commit()
+        conexao.commit()
 
     def registrar(e):
         try:
@@ -170,15 +159,21 @@ def main(page: ft.Page):
             alerta_baralho_novo = ft.AlertDialog(
                 title='Adicionar um novo baralho',
                 content=ft.Column(
-                    controls=[nome_baralho,desc_baralho, ft.Row(
-                        controls=[ft.TextButton(
-                            'Criar', 
-                            on_click=lambda e:
-                                                ), ]
-                    )],
+                    controls=[
+                        nome_baralho,
+                        desc_baralho, 
+                        ft.Row(
+                            controls=[ft.TextButton(
+                                'Criar', 
+                                on_click= insert_novo_baralho
+                                                    ),
+                                    ft.TextButton(
+                                'Cancelar', 
+                                on_click= page.close(alerta_baralho_novo)
+                                                    )]
+                        )],
                     height=200
                                   ),
-                on_dismiss=lambda e: operacao_cancelada
                 
                 )
             page.open(alerta_baralho_novo)
@@ -193,7 +188,7 @@ def main(page: ft.Page):
             )
             page.open(snackbar)
 
-        
+        listar_baralhos(e)
         page.update()
 
     def visualizar_baralho(e):
