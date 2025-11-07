@@ -74,6 +74,21 @@ def main(page: ft.Page):
 
     page.on_route_change = mudar_tela
 
+    def operacao_cancelada(e):
+        snackbar = ft.SnackBar(
+                    content=ft.Text(f"Operação cancelada"),
+                    bgcolor="red",
+                    duration=4000,
+                    action="OK"
+                )
+        
+        page.open(snackbar)
+        page.update()
+
+    def insert_novo_baralho(e):
+        cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
+        cursor.commit()
+
     def registrar(e):
         try:
             cursor.execute('insert into usuarios (nome_usuario, email, senha) values (%s, %s, %s)', (usuario_registro.value, email_registro.value, senha_registro.value))
@@ -118,7 +133,7 @@ def main(page: ft.Page):
             page.go('/principal')
 
         except Exception as error:
-            print(f"Erro no login: {error}")
+            print(f"Erro no processo: {error}")
             snackbar = ft.SnackBar(
                 content=ft.Text(f"Erro: {str(error)}"),
                 bgcolor="red",
@@ -152,10 +167,21 @@ def main(page: ft.Page):
 
     def adicionar_baralho(e):
         try:
-            ft.AlertDialog()
-
-            cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
-            cursor.commit()
+            alerta_baralho_novo = ft.AlertDialog(
+                title='Adicionar um novo baralho',
+                content=ft.Column(
+                    controls=[nome_baralho,desc_baralho, ft.Row(
+                        controls=[ft.TextButton(
+                            'Criar', 
+                            on_click=lambda e:
+                                                ), ]
+                    )],
+                    height=200
+                                  ),
+                on_dismiss=lambda e: operacao_cancelada
+                
+                )
+            page.open(alerta_baralho_novo)
 
         except Exception as error:
             print(f"Erro no processo: {error}")
@@ -165,8 +191,9 @@ def main(page: ft.Page):
                 duration=10000,
                 action="OK"
             )
+            page.open(snackbar)
 
-        page.open(snackbar)
+        
         page.update()
 
     def visualizar_baralho(e):
