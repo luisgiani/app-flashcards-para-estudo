@@ -169,14 +169,30 @@ def main(page: ft.Page):
                                                     ),
                                     ft.TextButton(
                                 'Cancelar', 
-                                on_click= page.close(alerta_baralho_novo)
+                                on_click= lambda _: fechar_alerta(e)
                                                     )]
                         )],
                     height=200
                                   ),
                 
                 )
+            
+            def fechar_alerta(e):
+                alerta_baralho_novo.open = False
+                page.update()
+
+                snackbar = ft.SnackBar(
+                content=ft.Text("Operação cancelada!"),
+                bgcolor="red",
+                duration=3000,
+                action="OK"
+            )
+            
+                page.open(snackbar)
+                page.update()
+
             page.open(alerta_baralho_novo)
+
 
         except Exception as error:
             print(f"Erro no processo: {error}")
