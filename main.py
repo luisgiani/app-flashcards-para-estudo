@@ -74,7 +74,7 @@ def main(page: ft.Page):
 
     page.on_route_change = mudar_tela
 
-    def insert_novo_baralho(e):
+    def insert_novo_baralho(usuario_logado, nome_baralho, desc_baralho):
         cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
         conexao.commit()
 
@@ -156,28 +156,25 @@ def main(page: ft.Page):
 
     def adicionar_baralho(e):
         try:
-            alerta_baralho_novo = ft.AlertDialog(
-                title='Adicionar um novo baralho',
-                content=ft.Column(
-                    controls=[
-                        nome_baralho,
-                        desc_baralho, 
-                        ft.Row(
-                            controls=[ft.TextButton(
-                                'Criar', 
-                                on_click= insert_novo_baralho
-                                                    ),
-                                    ft.TextButton(
-                                'Cancelar', 
-                                on_click= lambda _: fechar_alerta(e)
-                                                    )]
-                        )],
-                    height=200
-                                  ),
+            def alerta_sucesso(e):
+                insert_novo_baralho(usuario_logado, nome_baralho, desc_baralho)
                 
+                snackbar = ft.SnackBar(
+                    content=ft.Text("Baralho criado com sucesso!"),
+                    bgcolor="green",
+                    duration=3000,
+                    action="OK"
                 )
             
-            def fechar_alerta(e):
+                nome_baralho.value = ''
+                desc_baralho.value = ''
+                grid_baralhos.controls.clear()
+                #grid_baralhos.controls.append(container_novo_baralho)
+                listar_baralhos(e)
+                page.open(snackbar)
+                page.update()
+
+            def alerta_cancelado(e):
                 alerta_baralho_novo.open = False
                 page.update()
 
@@ -191,8 +188,28 @@ def main(page: ft.Page):
                 page.open(snackbar)
                 page.update()
 
-            page.open(alerta_baralho_novo)
+            alerta_baralho_novo = ft.AlertDialog(
+                title='Adicionar um novo baralho',
+                content=ft.Column(
+                    controls=[
+                        nome_baralho,
+                        desc_baralho, 
+                        ft.Row(
+                            controls=[ft.TextButton(
+                                'Criar', 
+                                on_click= lambda _:alerta_sucesso(e)
+                                                    ),
+                                    ft.TextButton(
+                                'Cancelar', 
+                                on_click= lambda _: alerta_cancelado(e)
+                                                    )]
+                        )],
+                        height=200
+                                  ),
+                
+                )
 
+            page.open(alerta_baralho_novo)
 
         except Exception as error:
             print(f"Erro no processo: {error}")
@@ -203,9 +220,6 @@ def main(page: ft.Page):
                 action="OK"
             )
             page.open(snackbar)
-
-        listar_baralhos(e)
-        page.update()
 
     def visualizar_baralho(e):
         pass
