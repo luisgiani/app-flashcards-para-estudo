@@ -166,6 +166,7 @@ def main(page: ft.Page):
                     action="OK"
                 )
             
+                alerta_baralho_novo.open = False
                 nome_baralho.value = ''
                 desc_baralho.value = ''
                 grid_baralhos.controls.clear()
