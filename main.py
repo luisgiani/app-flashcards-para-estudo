@@ -169,7 +169,7 @@ def main(page: ft.Page):
                 nome_baralho.value = ''
                 desc_baralho.value = ''
                 grid_baralhos.controls.clear()
-                #grid_baralhos.controls.append(container_novo_baralho)
+                grid_baralhos.controls.append(container_novo_baralho)
                 listar_baralhos(e)
                 page.open(snackbar)
                 page.update()
