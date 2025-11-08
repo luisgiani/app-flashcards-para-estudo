@@ -190,7 +190,7 @@ def main(page: ft.Page):
                 page.update()
 
             alerta_baralho_novo = ft.AlertDialog(
-                title='Adicionar um novo baralho',
+                title=titulo_add_baralho,
                 content=ft.Column(
                     controls=[
                         nome_baralho,
@@ -201,11 +201,13 @@ def main(page: ft.Page):
                                 on_click= lambda _:alerta_sucesso(e)
                                                     ),
                                     ft.TextButton(
-                                'Cancelar', 
+                                'Cancelar',
                                 on_click= lambda _: alerta_cancelado(e)
-                                                    )]
+                                                    )],
+                            alignment='center'
                         )],
-                        height=200
+                        height=150,
+                        alignment= 'center'
                                   ),
                 
                 )
@@ -227,6 +229,11 @@ def main(page: ft.Page):
 
     usuario_logado = ''
 
+    titulo_add_baralho = ft.Text(
+        value='Adicionar um novo baralho:', 
+        weight='bold'
+        )
+
     nome_baralho = ft.TextField(
         label='Nome do baralho', 
         text_size=24,
@@ -236,7 +243,8 @@ def main(page: ft.Page):
     desc_baralho = ft.TextField(
         label='Descrição do baralho', 
         text_size=24,
-        border_color='white'
+        border_color='white',
+        
         )
     
     titulo_login = ft.Text(
