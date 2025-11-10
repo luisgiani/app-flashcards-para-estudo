@@ -66,6 +66,15 @@ def main(page: ft.Page):
                     ]
                 )
             )
+        elif page.route == '/principal/baralho':
+            page.views.append(
+                ft.View(
+                    '/principal/baralho',
+                    [
+                        
+                    ]
+                )
+            )
 
         usuario_registro.value = ''
         email_login.value = ''
@@ -225,7 +234,7 @@ def main(page: ft.Page):
             page.open(snackbar)
 
     def visualizar_baralho(e):
-        pass
+        
 
     usuario_logado = ''
 
@@ -244,7 +253,6 @@ def main(page: ft.Page):
         label='Descrição do baralho', 
         text_size=24,
         border_color='white',
-        
         )
     
     titulo_login = ft.Text(
