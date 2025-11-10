@@ -71,7 +71,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        
+
                     ]
                 )
             )
@@ -161,6 +161,8 @@ def main(page: ft.Page):
                 on_click=visualizar_baralho
                 )
             
+            container_baralho.data = baralho[0]
+
             grid_baralhos.controls.append(container_baralho)
 
     def adicionar_baralho(e):
@@ -200,26 +202,38 @@ def main(page: ft.Page):
 
             alerta_baralho_novo = ft.AlertDialog(
                 title=titulo_add_baralho,
-                content=ft.Column(
-                    controls=[
-                        nome_baralho,
-                        desc_baralho, 
-                        ft.Row(
-                            controls=[ft.TextButton(
-                                'Criar', 
-                                on_click= lambda _:alerta_sucesso(e)
-                                                    ),
-                                    ft.TextButton(
-                                'Cancelar',
-                                on_click= lambda _: alerta_cancelado(e)
-                                                    )],
-                            alignment='center'
-                        )],
-                        height=150,
-                        alignment= 'center'
-                                  ),
-                
+                content=ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            nome_baralho,
+                            desc_baralho, 
+                            ft.Row(
+                                controls=[ft.Container(
+                                    content=ft.TextButton(
+                                        'Criar',
+                                        on_click= lambda _:alerta_sucesso(e),
+                                    ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1  
+                                                        ),
+                                    ft.Container(content=ft.TextButton(
+                                        'Cancelar',
+                                        on_click= lambda _:alerta_cancelado(e),
+                                    ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1  
+                                    )],
+                                )
+                            ],
+                            alignment= 'center',
+                            spacing=15
+                    ),
+                    height=180,
+                    width=400
                 )
+            )
 
             page.open(alerta_baralho_novo)
 
@@ -234,7 +248,8 @@ def main(page: ft.Page):
             page.open(snackbar)
 
     def visualizar_baralho(e):
-        
+        cod_baralho_clicado = e.control.data
+        print(f"Baralho clicado, ID: {cod_baralho_clicado}")
 
     usuario_logado = ''
 
@@ -246,13 +261,15 @@ def main(page: ft.Page):
     nome_baralho = ft.TextField(
         label='Nome do baralho', 
         text_size=24,
-        border_color='white'
+        border_color='white',
+        border_radius=15
         )
 
     desc_baralho = ft.TextField(
         label='Descrição do baralho', 
         text_size=24,
         border_color='white',
+        border_radius=15
         )
     
     titulo_login = ft.Text(
