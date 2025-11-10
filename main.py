@@ -146,7 +146,7 @@ def main(page: ft.Page):
         page.update()
 
     def listar_baralhos(e):
-        cursor.execute('select * from baralhos where id_usuario = %s',(usuario_logado,))
+        cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
 
         for baralho in lista_baralhos:
@@ -188,16 +188,6 @@ def main(page: ft.Page):
 
             def alerta_cancelado(e):
                 alerta_baralho_novo.open = False
-                page.update()
-
-                snackbar = ft.SnackBar(
-                content=ft.Text("Operação cancelada!"),
-                bgcolor="red",
-                duration=3000,
-                action="OK"
-            )
-            
-                page.open(snackbar)
                 page.update()
 
             alerta_baralho_novo = ft.AlertDialog(
@@ -251,7 +241,9 @@ def main(page: ft.Page):
         cod_baralho_clicado = e.control.data
         print(f"Baralho clicado, ID: {cod_baralho_clicado}")
 
-    usuario_logado = ''
+        
+
+    usuario_logado = 1
 
     titulo_add_baralho = ft.Text(
         value='Adicionar um novo baralho:', 
