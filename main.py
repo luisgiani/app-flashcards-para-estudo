@@ -143,6 +143,7 @@ def main(page: ft.Page):
         page.update()
 
     def listar_baralhos(e):
+        nonlocal stats_baralho
         cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
         grid_baralhos.controls.append(container_novo_baralho)
@@ -161,6 +162,10 @@ def main(page: ft.Page):
             
             container_baralho.data = baralho[0]
             grid_baralhos.controls.append(container_baralho)
+        
+        cursor.execute('select count(*) from baralhos where id_usuario = %s', (usuario_logado,))
+        retorno = cursor.fetchone()
+        stats_baralho.value = retorno[0]
      
         page.update()
 
@@ -390,17 +395,18 @@ def main(page: ft.Page):
         max_extent=200
     )
 
+    stats_baralho = ft.Text(
+        '0', 
+            size=24, 
+            weight='bold')
+
     stats_inicio = ft.Container(
         content=ft.Row(
             controls=[
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text(
-                                '20', 
-                                size=24,
-                                weight='bold'
-                                ),
+                            stats_baralho,
                             ft.Text(
                                 'Baralhos', 
                                 size=14
