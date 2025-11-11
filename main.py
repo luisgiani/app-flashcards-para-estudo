@@ -243,7 +243,8 @@ def main(page: ft.Page):
         nonlocal titulo_baralho
         cod_baralho_clicado = e.control.data
         cursor.execute('select nome_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
-        titulo_baralho = cursor.fetchone()
+        retorno = cursor.fetchone()
+        titulo_baralho = retorno[0]
         print(f"Baralho clicado, ID: {cod_baralho_clicado}")
 
         page.go('/principal/baralho')
