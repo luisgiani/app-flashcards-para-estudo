@@ -252,31 +252,52 @@ def main(page: ft.Page):
         conexao.commit()
 
     def visualizar_baralho(e):
-        nonlocal titulo_baralho
+        nonlocal titulo_baralho,cod_baralho_clicado
         cod_baralho_clicado = e.control.data
         cursor.execute('select nome_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
         retorno = cursor.fetchone()
         titulo_baralho = retorno[0]
-        print(f"Baralho clicado, ID: {cod_baralho_clicado}")
+        #print(f"Baralho clicado, ID: {cod_baralho_clicado}")
+
+        listar_cards(e,cod_baralho_clicado)
 
         page.go('/principal/baralho')
 
+    def listar_cards(e,cod_baralho_clicado):
+        lista_cards.controls.clear()
+        cursor.execute('select * from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
+        lista_flashcards = cursor.fetchall()
+
+        for card in lista_flashcards:
+            print(f'card encontrado: {card[2]}')
+
+            flashcard = ft.Container(
+                content=ft.Text(card[2], size=16),
+                padding=ft.padding.all(10),
+                ink=True,
+                on_click= lambda _: editar_card(e)
+            )
+
+            lista_cards.controls.append(flashcard)
+        
+        page.update()
+
+    def editar_card(e):
+        pass
+
     usuario_logado = 1
     titulo_baralho = ''
+    cod_baralho_clicado = ''
 
     voltar_principal = ft.IconButton(
         icon=ft.Icons.ARROW_BACK,
         on_click=lambda _:page.go('/principal')
     )
 
-    lista_cards = ft.Container(
-        content=ft.ListView(
-            controls=[
-                ft.Text('lista de cards')
-            ]
-        ),
-        expand=1
-    )
+    lista_cards = ft.ListView(
+            controls=[ft.Text('Cards:')],
+            spacing=10
+        )
 
     titulo_add_baralho = ft.Text(
         value='Adicionar um novo baralho:', 
@@ -487,6 +508,8 @@ def main(page: ft.Page):
             border_radius=10
         )
     
+    #criar uma aba de planejamento, onde é definido o tempo dos cards a serem revisados
+    #na barra lateral vão ter as abas de usuário, planejamento e estudos(baralhos)
     barra_lateral = ft.NavigationRail()
 
 
