@@ -152,6 +152,8 @@ def main(page: ft.Page):
         retorno = cursor.fetchone()
         stats_cards.value = retorno[0]
 
+        #fazer parte de revisão
+
     def listar_baralhos(e):
         cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
@@ -253,32 +255,34 @@ def main(page: ft.Page):
 
     def visualizar_baralho(e):
         nonlocal titulo_baralho,cod_baralho_clicado
+
         cod_baralho_clicado = e.control.data
         cursor.execute('select nome_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
         retorno = cursor.fetchone()
         titulo_baralho = retorno[0]
-        #print(f"Baralho clicado, ID: {cod_baralho_clicado}")
-
-        listar_cards(e,cod_baralho_clicado)
 
         page.go('/principal/baralho')
 
+        listar_cards(e,cod_baralho_clicado)
+        
     def listar_cards(e,cod_baralho_clicado):
         lista_cards.controls.clear()
         cursor.execute('select * from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
         lista_flashcards = cursor.fetchall()
 
         for card in lista_flashcards:
-            print(f'card encontrado: {card[2]}')
-
             flashcard = ft.Container(
                 content=ft.Text(card[2], size=16),
-                padding=ft.padding.all(10),
                 ink=True,
                 on_click= lambda _: editar_card(e)
             )
 
             lista_cards.controls.append(flashcard)
+
+        if not lista_flashcards:
+            lista_cards.controls.append(
+                ft.Text('Nenhum card encontrado neste baralho', size=16, color='white')
+            )
         
         page.update()
 
