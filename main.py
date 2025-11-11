@@ -57,12 +57,13 @@ def main(page: ft.Page):
                 )
             )
         elif page.route == '/principal':
+            grid_baralhos.controls.clear()
             listar_baralhos(e)
             page.views.append(
                 ft.View(
                     '/principal',
                     [
-                        ft.Row(controls=[titulo_baralhos, ft.Text(f'meu usuário atual é : {usuario_logado}', color='white')]), stats_inicio, pesquisa, grid_baralhos
+                        ft.Row(controls=[titulo_principal, ft.Text(f'meu usuário atual é : {usuario_logado}', color='white')]), stats_inicio, pesquisa, grid_baralhos
                     ]
                 )
             )
@@ -71,8 +72,8 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-
-                    ]
+                        voltar_principal, ft.Column(controls=[ft.Text('Visualização do Baralho', weight='bold',size=32),ft.Text(titulo_baralho, size=24)]), lista_cards
+                     ]
                 )
             )
 
@@ -82,10 +83,6 @@ def main(page: ft.Page):
         page.update()
 
     page.on_route_change = mudar_tela
-
-    def insert_novo_baralho(usuario_logado, nome_baralho, desc_baralho):
-        cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
-        conexao.commit()
 
     def registrar(e):
         try:
@@ -148,6 +145,7 @@ def main(page: ft.Page):
     def listar_baralhos(e):
         cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
+        grid_baralhos.controls.append(container_novo_baralho)
 
         for baralho in lista_baralhos:
             container_baralho = ft.Container(
@@ -162,8 +160,9 @@ def main(page: ft.Page):
                 )
             
             container_baralho.data = baralho[0]
-
             grid_baralhos.controls.append(container_baralho)
+     
+        page.update()
 
     def adicionar_baralho(e):
         try:
@@ -181,7 +180,6 @@ def main(page: ft.Page):
                 nome_baralho.value = ''
                 desc_baralho.value = ''
                 grid_baralhos.controls.clear()
-                grid_baralhos.controls.append(container_novo_baralho)
                 listar_baralhos(e)
                 page.open(snackbar)
                 page.update()
@@ -237,13 +235,35 @@ def main(page: ft.Page):
             )
             page.open(snackbar)
 
+    def insert_novo_baralho(usuario_logado, nome_baralho, desc_baralho):
+        cursor.execute('insert into baralhos (id_usuario, nome_baralho, desc_baralho) values (%s, %s, %s)', (usuario_logado, nome_baralho.value, desc_baralho.value))
+        conexao.commit()
+
     def visualizar_baralho(e):
+        nonlocal titulo_baralho
         cod_baralho_clicado = e.control.data
+        cursor.execute('select nome_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
+        titulo_baralho = cursor.fetchone()
         print(f"Baralho clicado, ID: {cod_baralho_clicado}")
 
-        
+        page.go('/principal/baralho')
 
     usuario_logado = 1
+    titulo_baralho = ''
+
+    voltar_principal = ft.IconButton(
+        icon=ft.Icons.ARROW_BACK,
+        on_click=lambda _:page.go('/principal')
+    )
+
+    lista_cards = ft.Container(
+        content=ft.ListView(
+            controls=[
+                ft.Text('lista de cards')
+            ]
+        ),
+        expand=1
+    )
 
     titulo_add_baralho = ft.Text(
         value='Adicionar um novo baralho:', 
@@ -343,7 +363,7 @@ def main(page: ft.Page):
             on_click=lambda _: page.go('/principal')
             )
     
-    titulo_baralhos = ft.Text(
+    titulo_principal = ft.Text(
         value='Meus Baralhos', 
         size= 40,
         weight='bold'
