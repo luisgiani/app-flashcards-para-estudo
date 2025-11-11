@@ -142,8 +142,17 @@ def main(page: ft.Page):
         senha_login.value = ''
         page.update()
 
+    def atualizar_stats_iniciais(e):
+        nonlocal stats_baralho, stats_cards, stats_revisar
+        cursor.execute('select count(*) from baralhos where id_usuario = %s', (usuario_logado,))
+        retorno = cursor.fetchone()
+        stats_baralho.value = retorno[0]
+
+        cursor.execute('select count(*) from flashcards where cod_baralho in (select cod_baralho from baralhos where id_usuario = %s)', (usuario_logado,))
+        retorno = cursor.fetchone()
+        stats_cards.value = retorno[0]
+
     def listar_baralhos(e):
-        nonlocal stats_baralho
         cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
         grid_baralhos.controls.append(container_novo_baralho)
@@ -163,9 +172,7 @@ def main(page: ft.Page):
             container_baralho.data = baralho[0]
             grid_baralhos.controls.append(container_baralho)
         
-        cursor.execute('select count(*) from baralhos where id_usuario = %s', (usuario_logado,))
-        retorno = cursor.fetchone()
-        stats_baralho.value = retorno[0]
+        atualizar_stats_iniciais(e)
      
         page.update()
 
@@ -397,8 +404,21 @@ def main(page: ft.Page):
 
     stats_baralho = ft.Text(
         '0', 
-            size=24, 
-            weight='bold')
+        size=24, 
+        weight='bold'
+    )
+    
+    stats_cards = ft.Text(
+        '0', 
+        size=24, 
+        weight='bold'
+    )
+    
+    stats_revisar = ft.Text(
+        '0', 
+        size=24, 
+        weight='bold'
+    )
 
     stats_inicio = ft.Container(
         content=ft.Row(
@@ -423,11 +443,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text(
-                                '144', 
-                                size=24,
-                                weight='bold'
-                                ),
+                            stats_cards,
                             ft.Text(
                                 'Cards', 
                                 size=14
@@ -444,11 +460,7 @@ def main(page: ft.Page):
                 ft.Container(
                     content=ft.Column(
                         controls=[
-                            ft.Text(
-                                '24', 
-                                size=24,
-                                weight='bold'
-                                ),
+                            stats_revisar,
                             ft.Text(
                                 'Para Revisar', 
                                 size=14
