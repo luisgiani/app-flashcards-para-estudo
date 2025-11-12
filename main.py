@@ -72,7 +72,9 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=28)]),ft.Text(titulo_baralho, size=24), ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5)
+                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=28)]),
+                        ft.Row(ft.Text(titulo_baralho, size=24), icone_editar_baralho),
+                        ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5)
                      ]
                 )
             )
@@ -267,6 +269,7 @@ def main(page: ft.Page):
         
     def listar_cards(e,cod_baralho_clicado):
         lista_cards.controls.clear()
+        lista_cards.controls.append(container_novo_card)
         cursor.execute('select * from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
         lista_flashcards = cursor.fetchall()
 
@@ -289,6 +292,12 @@ def main(page: ft.Page):
     def editar_card(e):
         pass
 
+    def adicionar_card(e):
+        pass
+
+    def editar_baralho(e):
+        pass
+
     usuario_logado = 1
     titulo_baralho = ''
     cod_baralho_clicado = ''
@@ -298,10 +307,21 @@ def main(page: ft.Page):
         on_click=lambda _:page.go('/principal')
     )
 
+    icone_editar_baralho = ft.IconButton(
+        icon=ft.Icons.EDIT,
+        on_click= lambda _: editar_baralho
+    )
+
     lista_cards = ft.ListView(
-            controls=[ft.Text('Cards:')],
+            controls=[],
             spacing=10
         )
+
+    container_novo_card = ft.Container(
+        content=ft.Icon(ft.Icons.ADD),
+        ink= True,
+        on_click= lambda _: adicionar_card
+    )
 
     titulo_add_baralho = ft.Text(
         value='Adicionar um novo baralho:', 
