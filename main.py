@@ -72,9 +72,9 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=28)]),
-                        ft.Row(ft.Text(titulo_baralho, size=24), icone_editar_baralho),
-                        ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5)
+                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
+                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho], alignment='left',spacing=5), padding= 2),
+                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5, expand= True), ft.Container(content=ft.Text('teste'), expand= True)], expand= True)
                      ]
                 )
             )
@@ -302,6 +302,10 @@ def main(page: ft.Page):
     titulo_baralho = ''
     cod_baralho_clicado = ''
 
+    container_desc_baralho = ft.Container(
+        
+    )
+
     voltar_principal = ft.IconButton(
         icon=ft.Icons.ARROW_BACK,
         on_click=lambda _:page.go('/principal')
@@ -314,7 +318,8 @@ def main(page: ft.Page):
 
     lista_cards = ft.ListView(
             controls=[],
-            spacing=10
+            spacing=10,
+            expand= True
         )
 
     container_novo_card = ft.Container(
