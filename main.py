@@ -74,7 +74,7 @@ def main(page: ft.Page):
                     [
                         ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
                         ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho], alignment='left',spacing=5), padding= 2),
-                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5, expand= True), ft.Container(content=ft.Text('teste'), expand= True)], expand= True)
+                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5, expand= True), container_desc_baralho], expand= True)
                      ]
                 )
             )
@@ -256,12 +256,20 @@ def main(page: ft.Page):
         conexao.commit()
 
     def visualizar_baralho(e):
-        nonlocal titulo_baralho,cod_baralho_clicado
+        nonlocal titulo_baralho,cod_baralho_clicado,descricao_baralho
 
         cod_baralho_clicado = e.control.data
-        cursor.execute('select nome_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
+        cursor.execute('select nome_baralho, desc_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
         retorno = cursor.fetchone()
         titulo_baralho = retorno[0]
+        descricao_baralho = retorno[1]
+
+        print(descricao_baralho)
+
+        if descricao_baralho:
+            container_desc_baralho.content = ft.Text(f'Descrição: \n{descricao_baralho}', size= 18, color='white')
+        else:
+            container_desc_baralho.content = ft.Text('Descrição: \nNenhuma descrição foi informada para este baralho.', size= 18, color='white')
 
         page.go('/principal/baralho')
 
@@ -300,10 +308,17 @@ def main(page: ft.Page):
 
     usuario_logado = 1
     titulo_baralho = ''
+    descricao_baralho = ''
     cod_baralho_clicado = ''
 
     container_desc_baralho = ft.Container(
-        
+        content='',
+        padding=15,
+        bgcolor='#2A2A2A',
+        border=ft.border.all(1, 'white'),
+        border_radius=10,
+        margin=10,
+        expand=1
     )
 
     voltar_principal = ft.IconButton(
