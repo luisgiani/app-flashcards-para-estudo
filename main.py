@@ -72,7 +72,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        voltar_principal, ft.Column(controls=[ft.Text('Visualização do Baralho', weight='bold',size=32),ft.Text(titulo_baralho, size=24)]), lista_cards
+                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=28)]),ft.Text(titulo_baralho, size=24), ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5)
                      ]
                 )
             )
