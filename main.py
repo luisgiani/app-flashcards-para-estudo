@@ -74,7 +74,7 @@ def main(page: ft.Page):
                     [
                         ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
                         ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho], alignment='left',spacing=5), padding= 2),
-                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, padding=5, expand= True), container_desc_baralho], expand= True)
+                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, margin=10, padding=15, expand= True), container_desc_baralho], expand= True)
                      ]
                 )
             )
@@ -334,7 +334,7 @@ def main(page: ft.Page):
     lista_cards = ft.ListView(
             controls=[],
             spacing=10,
-            expand= True
+            expand= True,
         )
 
     container_novo_card = ft.Container(
