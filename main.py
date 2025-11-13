@@ -302,8 +302,41 @@ def main(page: ft.Page):
 
     def adicionar_card(e):
         pass
+    
+    def insert_card(e):
+        
 
     def editar_baralho(e):
+        try:
+            alerta_card_novo = ft.AlertDialog(
+                title='Novo flashcard',
+                content= ft.Container(
+                    content=ft.Column(controls=[
+                        pergunta_card, resposta_card
+                    ])
+                ),
+            )
+
+            insert_card(e, pergunta_card.value, resposta_card.value)
+
+            page.open(alerta_card_novo)
+
+        except Exception as error:
+            print(f"Erro no processo: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+            page.open(snackbar)
+
+        page.update()
+
+    def excluir_baralho(e):
+        pass
+
+    def iniciar_estudo(e):
         pass
 
     usuario_logado = 1
@@ -311,11 +344,26 @@ def main(page: ft.Page):
     descricao_baralho = ''
     cod_baralho_clicado = ''
 
+    pergunta_card = ft.TextField(
+        label='Insira a pergunta deste card',
+        text_size=24,
+        border_color='white',
+        border_radius=15,
+    )
+
+    resposta_card = ft.TextField(
+        label='Insira a pergunta deste card',
+        text_size=24,
+        border_color='white',
+        border_radius=15
+    )
+
     botao_estudar = ft.IconButton(
         icon=ft.Icons.PLAY_CIRCLE,
         bgcolor= 'green',
         icon_color='white',
-        scale=1
+        scale=1,
+        on_click= iniciar_estudo
     )
 
     container_desc_baralho = ft.Container(
@@ -344,24 +392,24 @@ def main(page: ft.Page):
 
     icone_editar_baralho = ft.IconButton(
         icon=ft.Icons.EDIT,
-        on_click= lambda _: editar_baralho
+        on_click= editar_baralho
     )
 
     icone_excluir_baralho = ft.IconButton(
         icon=ft.Icons.DELETE,
-        on_click= lambda _: editar_baralho
+        on_click= excluir_baralho
     )
 
     lista_cards = ft.ListView(
             controls=[],
             spacing=10,
-            expand= True,
+            expand= True
         )
 
     container_novo_card = ft.Container(
         content=ft.Icon(ft.Icons.ADD),
         ink= True,
-        on_click= lambda _: adicionar_card
+        on_click= adicionar_card
     )
 
     titulo_add_baralho = ft.Text(
