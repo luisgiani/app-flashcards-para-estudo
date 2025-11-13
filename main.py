@@ -73,8 +73,8 @@ def main(page: ft.Page):
                     '/principal/baralho',
                     [
                         ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
-                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho], alignment='left',spacing=5), padding= 2),
-                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, margin=10, padding=15, expand= True), container_desc_baralho], expand= True)
+                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho, icone_excluir_baralho], alignment='left',spacing=5), padding= 2),
+                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, margin=10, padding=15, expand= True), ft.Container(content=coluna_visualizar_baralho, border_radius=10, margin=10, padding=15, expand= True)], expand= True)
                      ]
                 )
             )
@@ -311,6 +311,13 @@ def main(page: ft.Page):
     descricao_baralho = ''
     cod_baralho_clicado = ''
 
+    botao_estudar = ft.IconButton(
+        icon=ft.Icons.PLAY_CIRCLE,
+        bgcolor= 'green',
+        icon_color='white',
+        scale=2,
+    )
+
     container_desc_baralho = ft.Container(
         content='',
         padding=15,
@@ -318,7 +325,15 @@ def main(page: ft.Page):
         border=ft.border.all(1, 'white'),
         border_radius=10,
         margin=10,
-        expand=1
+        expand=1,
+    )
+
+    coluna_visualizar_baralho = ft.Column(
+        controls=[
+            container_desc_baralho, botao_estudar
+        ],
+        expand=1,
+        spacing=15,
     )
 
     voltar_principal = ft.IconButton(
@@ -328,6 +343,11 @@ def main(page: ft.Page):
 
     icone_editar_baralho = ft.IconButton(
         icon=ft.Icons.EDIT,
+        on_click= lambda _: editar_baralho
+    )
+
+    icone_excluir_baralho = ft.IconButton(
+        icon=ft.Icons.DELETE,
         on_click= lambda _: editar_baralho
     )
 
