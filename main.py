@@ -300,24 +300,43 @@ def main(page: ft.Page):
     def editar_card(e):
         pass
 
-    def adicionar_card(e):
-        pass
-    
-    def insert_card(e):
-        
+    def insert_card(pergunta_card.value, resposta_card.value):
+        cursor.execute('insert into flashcards (pergunta, resposta) values (%s,%s)', (pergunta_card.value, resposta_card.value))
+        cursor.commit()
 
-    def editar_baralho(e):
+    def adicionar_card(e):
         try:
-            alerta_card_novo = ft.AlertDialog(
+            def alerta_cancelado(e):
+                alerta_baralho_novo.open = False
+                page.update()
+            
+                        alerta_card_novo = ft.AlertDialog(
                 title='Novo flashcard',
                 content= ft.Container(
                     content=ft.Column(controls=[
-                        pergunta_card, resposta_card
-                    ])
+                        pergunta_card, 
+                        resposta_card, 
+                        ft.Row(controls=[
+                            ft.Container(content=ft.TextButton(
+                                        'Criar',
+                                        on_click= insert_card(pergunta_card.value, resposta_card.value)
+                                        ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1
+                                    ),
+                            ft.Container(content=ft.TextButton(
+                                        'Cancelar',
+                                        on_click=
+                                        ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1
+                                    )
+                        ])
+                    ]),
                 ),
             )
-
-            insert_card(e, pergunta_card.value, resposta_card.value)
 
             page.open(alerta_card_novo)
 
@@ -332,6 +351,10 @@ def main(page: ft.Page):
             page.open(snackbar)
 
         page.update()
+
+    def editar_baralho(e):
+        try:
+
 
     def excluir_baralho(e):
         pass
