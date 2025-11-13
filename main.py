@@ -234,7 +234,7 @@ def main(page: ft.Page):
                             alignment= 'center',
                             spacing=15
                     ),
-                    height=180,
+                    height=200,
                     width=400
                 )
             )
@@ -297,21 +297,36 @@ def main(page: ft.Page):
         
         page.update()
 
-    def editar_card(e):
-        pass
-
-    def insert_card(pergunta_card.value, resposta_card.value):
-        cursor.execute('insert into flashcards (pergunta, resposta) values (%s,%s)', (pergunta_card.value, resposta_card.value))
-        cursor.commit()
+    def insert_card(cod_baralho_clicado, pergunta_card, resposta_card):
+        cursor.execute('insert into flashcards (cod_baralho, pergunta, resposta) values (%s,%s, %s)', (cod_baralho_clicado,pergunta_card.value, resposta_card.value))
+        conexao.commit()
 
     def adicionar_card(e):
         try:
+            def alerta_sucesso(e):
+                insert_card(cod_baralho_clicado, pergunta_card, resposta_card)
+                
+                snackbar = ft.SnackBar(
+                    content=ft.Text("Flashcard criado com sucesso!"),
+                    bgcolor="green",
+                    duration=3000,
+                    action="OK"
+                )
+            
+                alerta_card_novo.open = False
+                pergunta_card.value = ''
+                resposta_card.value = ''
+                lista_cards.controls.clear()
+                listar_cards(e,cod_baralho_clicado)
+                page.open(snackbar)
+                page.update()
+
             def alerta_cancelado(e):
-                alerta_baralho_novo.open = False
+                alerta_card_novo.open = False
                 page.update()
             
-                        alerta_card_novo = ft.AlertDialog(
-                title='Novo flashcard',
+            alerta_card_novo = ft.AlertDialog(
+                title=ft.Text('Novo flashcard'),
                 content= ft.Container(
                     content=ft.Column(controls=[
                         pergunta_card, 
@@ -319,7 +334,7 @@ def main(page: ft.Page):
                         ft.Row(controls=[
                             ft.Container(content=ft.TextButton(
                                         'Criar',
-                                        on_click= insert_card(pergunta_card.value, resposta_card.value)
+                                        on_click= lambda _: alerta_sucesso(e)
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
@@ -327,7 +342,7 @@ def main(page: ft.Page):
                                     ),
                             ft.Container(content=ft.TextButton(
                                         'Cancelar',
-                                        on_click=
+                                        on_click= lambda _: alerta_cancelado(e)
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
@@ -335,6 +350,8 @@ def main(page: ft.Page):
                                     )
                         ])
                     ]),
+                    height= 200,
+                    width= 400
                 ),
             )
 
@@ -352,9 +369,11 @@ def main(page: ft.Page):
 
         page.update()
 
-    def editar_baralho(e):
-        try:
+    def editar_card(e):
+        pass
 
+    def editar_baralho(e):
+        pass
 
     def excluir_baralho(e):
         pass
@@ -399,9 +418,28 @@ def main(page: ft.Page):
         expand=True
     )
 
+    container_iniciar_estudos = ft.Container(
+        content=ft.Column(controls=
+            [
+                ft.Text(
+                'Iniciar Estudos', 
+                size=24, 
+                color='white', 
+                text_align='center', 
+                weight='bold'
+                ), 
+                botao_estudar
+            ]),
+        border=ft.border.all(1,'white'), 
+        border_radius=10,
+        margin=10, 
+        padding=15, 
+        expand= True
+    )
+
     coluna_visualizar_baralho = ft.Column(
         controls=[
-            container_desc_baralho, botao_estudar
+            container_desc_baralho, container_iniciar_estudos
         ],
         expand=True,
         spacing=15,
