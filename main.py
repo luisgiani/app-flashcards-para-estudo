@@ -389,7 +389,53 @@ def main(page: ft.Page):
         pass
 
     def excluir_baralho(e):
-        pass
+        def delete_baralho(e):
+            try:
+                cursor.execute('delete from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
+                cursor.execute('delete from baralhos where cod_baralho = %s', (cod_baralho_clicado,))
+                conexao.commit()
+
+                snackbar = ft.SnackBar(
+                    content=ft.Text(f"Baralho Excluído Com Sucesso"),
+                    bgcolor="green",
+                    duration=3000,
+                    action="OK"
+                )
+
+                page.go('/principal')
+                page.open(snackbar)
+
+            except Exception as error:
+                print(f"Erro no processo: {error}")
+                snackbar = ft.SnackBar(
+                    content=ft.Text(f"Erro: {str(error)}"),
+                    bgcolor="red",
+                    duration=10000,
+                    action="OK"
+                )
+                page.open(snackbar)
+
+        def cancelar(e):
+            alerta_excluir_baralho.open = False
+            page.update()
+
+        alerta_excluir_baralho = ft.AlertDialog(
+            title= ft.Text('Excluir Baralho'),
+            content= ft.Container(
+                content=ft.Column(
+                    controls=[
+                        ft.Text('Deseja excluir o baralho? (Essa ação não pode ser desfeita.)', size= 24, color='white', weight='bold'),
+                        ft.TextButton(text='Confirmar Exclusão', on_click=lambda _: delete_baralho(e)),
+                        ft.TextButton(text='Cancelar', on_click=lambda _: cancelar(e))
+                    ]
+                ),
+                height = 200,
+                width= 400
+            )
+        )
+
+        page.open(alerta_excluir_baralho)
+        page.update()
 
     def iniciar_estudo(e):
         pass
