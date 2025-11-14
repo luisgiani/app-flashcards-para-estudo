@@ -420,17 +420,16 @@ def main(page: ft.Page):
             page.update()
 
         alerta_excluir_baralho = ft.AlertDialog(
-            title= ft.Text('Excluir Baralho'),
+            title= ft.Text('Deseja excluir o baralho?\n(Essa ação não pode ser desfeita.)', size= 24, color='white', weight='bold'),
             content= ft.Container(
                 content=ft.Column(
                     controls=[
-                        ft.Text('Deseja excluir o baralho? (Essa ação não pode ser desfeita.)', size= 24, color='white', weight='bold'),
                         ft.TextButton(text='Confirmar Exclusão', on_click=lambda _: delete_baralho(e)),
                         ft.TextButton(text='Cancelar', on_click=lambda _: cancelar(e))
                     ]
                 ),
-                height = 200,
-                width= 400
+                height = 80,
+                width= 300
             )
         )
 
