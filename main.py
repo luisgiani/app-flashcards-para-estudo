@@ -78,6 +78,21 @@ def main(page: ft.Page):
                      ]
                 )
             )
+        elif page.route == '/principal/baralho/iniciar_estudos':
+            page.views.append(
+                ft.View(
+                    '/principal/baralho/iniciar_estudos',
+                    [
+                        ft.Row(controls=[
+                            voltar_baralho, titulo_iniciar_estudos
+                        ]),
+                        ft.Column(controls=[
+                            ft.Text('Pergunta 1'),
+                            #ft.Container(content=ft.Text(''))
+                        ])
+                    ]
+                )
+            )
 
         usuario_registro.value = ''
         email_login.value = ''
@@ -264,8 +279,6 @@ def main(page: ft.Page):
         titulo_baralho = retorno[0]
         descricao_baralho = retorno[1]
 
-        print(descricao_baralho)
-
         if descricao_baralho:
             container_desc_baralho.content = ft.Text(f'Descrição: \n{descricao_baralho}', size= 18, color='white')
         else:
@@ -386,6 +399,19 @@ def main(page: ft.Page):
     descricao_baralho = ''
     cod_baralho_clicado = ''
 
+    titulo_iniciar_estudos = ft.Text(
+        'Iniciar Estudos', 
+        size=24, 
+        color='white', 
+        text_align='center', 
+        weight='bold'
+        )
+
+    voltar_baralho = ft.IconButton(
+        icon=ft.Icons.ARROW_BACK,
+        on_click=lambda _:page.go('/principal/baralho')
+    )
+
     pergunta_card = ft.TextField(
         label='Insira a pergunta deste card',
         text_size=24,
@@ -405,7 +431,7 @@ def main(page: ft.Page):
         bgcolor= 'green',
         icon_color='white',
         scale=1,
-        on_click= iniciar_estudo
+        on_click= lambda _: page.go('/principal/baralho/iniciar_estudos')
     )
 
     container_desc_baralho = ft.Container(
@@ -558,7 +584,7 @@ def main(page: ft.Page):
 
     voltar_registro = ft.TextButton(
             text='Criar conta', 
-            on_click=lambda _: page.go('/registro'),
+            on_click=lambda _: page.go('/registro')
             )
 
     voltar_login = ft.TextButton(
