@@ -387,12 +387,29 @@ def main(page: ft.Page):
     def editar_baralho(e):
         try:
             def salvar_alteracoes(e):
-                pass
+                if alterar_titulo_baralho.value and alterar_desc_baralho.value:
+                    cursor.execute('update baralhos set nome_baralho, desc_baralho values (%s, %s) where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
+                elif alterar_titulo_baralho.value and alterar_desc_baralho.value is None:
+                    cursor.execute('update baralhos set nome_baralho values (%s) where cod_baralho = %s', (alterar_titulo_baralho.value, cod_baralho_clicado))
+                elif alterar_titulo_baralho.value is None and alterar_desc_baralho.value:
+                    cursor.execute('update baralhos set desc_baralho values (%s) where cod_baralho = %s', (alterar_desc_baralho.value, cod_baralho_clicado))
+                else:
+                    snackbar = ft.SnackBar(
+                        content=ft.Text(f"Valide as informações inseridas!"),
+                        bgcolor="red",
+                        duration=5000,
+                        action="OK"
+                    )
+
+                    page.open(snackbar)
+                    page.update()
+                
+                conexao.commit()
+                alerta_edicao.open = False
     
             def cancelar_edicao(e):
                 alerta_edicao.open = False
                 page.update()
-
 
             alerta_edicao = ft.AlertDialog(
                 title=ft.Text('Editar baralho:'),
@@ -500,12 +517,12 @@ def main(page: ft.Page):
     cod_baralho_clicado = ''
 
     alterar_titulo_baralho = ft.TextField(
-        label='Novo título',
+        label='Novo título (Preencha os campos que deseja alterar)',
         text_size=24
     )
     
     alterar_desc_baralho = ft.TextField(
-        label='Nova descrição',
+        label='Nova descrição (Preencha os campos que deseja alterar)',
         text_size=24
     )
 
