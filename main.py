@@ -88,7 +88,6 @@ def main(page: ft.Page):
                         ]),
                         ft.Column(controls=[
                             ft.Text('Pergunta 1'),
-                            #ft.Container(content=ft.Text(''))
                         ])
                     ]
                 )
@@ -386,7 +385,63 @@ def main(page: ft.Page):
         pass
 
     def editar_baralho(e):
-        pass
+        try:
+            def salvar_alteracoes(e):
+                pass
+    
+            def cancelar_edicao(e):
+                alerta_edicao.open = False
+                page.update()
+
+
+            alerta_edicao = ft.AlertDialog(
+                title=ft.Text('Editar baralho:'),
+                content=ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            alterar_titulo_baralho,
+                            alterar_desc_baralho,
+                            ft.Row(
+                                controls=[
+                                    ft.Container(
+                                        content=ft.TextButton(
+                                            'Salvar Alterações',
+                                            on_click=lambda _: salvar_alteracoes(e)
+                                        ),
+                                        border=ft.border.all(1,'white'),
+                                        border_radius=10,
+                                        expand=1
+                                    ),
+                                    ft.Container(
+                                        content=ft.TextButton(
+                                            'Cancelar',
+                                            on_click=lambda _: cancelar_edicao(e)
+                                        ),
+                                        border=ft.border.all(1,'white'),
+                                        border_radius=10,
+                                        expand=1
+                                    )
+                                ]
+                            )
+                        ]
+                    ),
+                    height=200,
+                    width=400
+                ))
+                    
+            page.open(alerta_edicao)
+
+        except Exception as error:
+            print(f"Erro no processo: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+            page.open(snackbar)
+
+        page.update()
 
     def excluir_baralho(e):
         def delete_baralho(e):
@@ -443,6 +498,16 @@ def main(page: ft.Page):
     titulo_baralho = ''
     descricao_baralho = ''
     cod_baralho_clicado = ''
+
+    alterar_titulo_baralho = ft.TextField(
+        label='Novo título',
+        text_size=24
+    )
+    
+    alterar_desc_baralho = ft.TextField(
+        label='Nova descrição',
+        text_size=24
+    )
 
     titulo_iniciar_estudos = ft.Text(
         'Iniciar Estudos', 
