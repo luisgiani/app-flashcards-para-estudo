@@ -387,15 +387,29 @@ def main(page: ft.Page):
     def editar_baralho(e):
         try:
             def salvar_alteracoes(e):
+                nonlocal descricao_baralho, titulo_baralho
                 if alterar_titulo_baralho.value and alterar_desc_baralho.value:
-                    cursor.execute('update baralhos set nome_baralho, desc_baralho values (%s, %s) where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
-                elif alterar_titulo_baralho.value and alterar_desc_baralho.value is None:
-                    cursor.execute('update baralhos set nome_baralho values (%s) where cod_baralho = %s', (alterar_titulo_baralho.value, cod_baralho_clicado))
-                elif alterar_titulo_baralho.value is None and alterar_desc_baralho.value:
-                    cursor.execute('update baralhos set desc_baralho values (%s) where cod_baralho = %s', (alterar_desc_baralho.value, cod_baralho_clicado))
+                    cursor.execute('update baralhos set nome_baralho = %s, desc_baralho = %s where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
+                    
+                    descricao_baralho = alterar_desc_baralho.value
+                    container_desc_baralho.content = ft.Text(f'Descrição: \n{descricao_baralho}', size=18, color='white')
+
+                    titulo_baralho = alterar_titulo_baralho.value
+
+                elif alterar_titulo_baralho.value and not alterar_desc_baralho.value:
+                    cursor.execute('update baralhos set nome_baralho = %s where cod_baralho = %s', (alterar_titulo_baralho.value, cod_baralho_clicado))
+
+                    titulo_baralho = alterar_titulo_baralho.value
+
+                elif alterar_desc_baralho.value and not alterar_titulo_baralho.value:
+                    cursor.execute('update baralhos set desc_baralho = %s where cod_baralho = %s', (alterar_desc_baralho.value, cod_baralho_clicado))
+
+                    descricao_baralho = alterar_desc_baralho.value
+                    container_desc_baralho.content = ft.Text(f'Descrição: \n{descricao_baralho}', size=18, color='white')
+
                 else:
                     snackbar = ft.SnackBar(
-                        content=ft.Text(f"Valide as informações inseridas!"),
+                        content=ft.Text(f"Pelo menos um campo deve ser preenchido!"),
                         bgcolor="red",
                         duration=5000,
                         action="OK"
@@ -403,10 +417,22 @@ def main(page: ft.Page):
 
                     page.open(snackbar)
                     page.update()
+                    return
                 
+                sucesso = ft.SnackBar(
+                        content=ft.Text("Baralho atualizado com sucesso!"),
+                        bgcolor="green",
+                        duration=3000,
+                        action="OK"
+                    )
+
                 conexao.commit()
                 alerta_edicao.open = False
-    
+                alterar_titulo_baralho.value = ''
+                alterar_desc_baralho.value = ''
+                page.open(sucesso)
+                page.update()
+
             def cancelar_edicao(e):
                 alerta_edicao.open = False
                 page.update()
@@ -518,12 +544,16 @@ def main(page: ft.Page):
 
     alterar_titulo_baralho = ft.TextField(
         label='Novo título (Preencha os campos que deseja alterar)',
-        text_size=24
+        text_size=24,
+        border_color='white',
+        border_radius=15  
     )
     
     alterar_desc_baralho = ft.TextField(
         label='Nova descrição (Preencha os campos que deseja alterar)',
-        text_size=24
+        text_size=24,
+        border_color='white',  
+        border_radius=15  
     )
 
     titulo_iniciar_estudos = ft.Text(
@@ -547,7 +577,7 @@ def main(page: ft.Page):
     )
 
     resposta_card = ft.TextField(
-        label='Insira a pergunta deste card',
+        label='Insira a resposta deste card',
         text_size=24,
         border_color='white',
         border_radius=15
