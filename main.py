@@ -270,7 +270,7 @@ def main(page: ft.Page):
         conexao.commit()
 
     def visualizar_baralho(e):
-        nonlocal titulo_baralho,cod_baralho_clicado,descricao_baralho, tela_titulo_baralho
+        nonlocal titulo_baralho,cod_baralho_clicado,descricao_baralho
 
         cod_baralho_clicado = e.control.data
         cursor.execute('select nome_baralho, desc_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
@@ -388,7 +388,7 @@ def main(page: ft.Page):
     def editar_baralho(e):
         try:
             def salvar_alteracoes(e):
-                nonlocal descricao_baralho, titulo_baralho, tela_titulo_baralho
+                nonlocal descricao_baralho, titulo_baralho
                 if alterar_titulo_baralho.value and alterar_desc_baralho.value:
                     cursor.execute('update baralhos set nome_baralho = %s, desc_baralho = %s where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
                     
@@ -402,6 +402,7 @@ def main(page: ft.Page):
                     cursor.execute('update baralhos set nome_baralho = %s where cod_baralho = %s', (alterar_titulo_baralho.value, cod_baralho_clicado))
 
                     titulo_baralho = alterar_titulo_baralho.value
+                    tela_titulo_baralho.value = titulo_baralho
 
                 elif alterar_desc_baralho.value and not alterar_titulo_baralho.value:
                     cursor.execute('update baralhos set desc_baralho = %s where cod_baralho = %s', (alterar_desc_baralho.value, cod_baralho_clicado))
