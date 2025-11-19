@@ -73,7 +73,7 @@ def main(page: ft.Page):
                     '/principal/baralho',
                     [
                         ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
-                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), ft.Text(titulo_baralho, size=28), icone_editar_baralho, icone_excluir_baralho], alignment='left',spacing=5), padding= 2),
+                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), tela_titulo_baralho, icone_editar_baralho, icone_excluir_baralho], alignment='left',spacing=5), padding= 2),
                         ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, margin=10, padding=15, expand= True), coluna_visualizar_baralho], expand= True)
                      ]
                 )
@@ -270,12 +270,13 @@ def main(page: ft.Page):
         conexao.commit()
 
     def visualizar_baralho(e):
-        nonlocal titulo_baralho,cod_baralho_clicado,descricao_baralho
+        nonlocal titulo_baralho,cod_baralho_clicado,descricao_baralho, tela_titulo_baralho
 
         cod_baralho_clicado = e.control.data
         cursor.execute('select nome_baralho, desc_baralho from baralhos where cod_baralho = %s',(cod_baralho_clicado,))
         retorno = cursor.fetchone()
         titulo_baralho = retorno[0]
+        tela_titulo_baralho.value = titulo_baralho
         descricao_baralho = retorno[1]
 
         if descricao_baralho:
@@ -387,7 +388,7 @@ def main(page: ft.Page):
     def editar_baralho(e):
         try:
             def salvar_alteracoes(e):
-                nonlocal descricao_baralho, titulo_baralho
+                nonlocal descricao_baralho, titulo_baralho, tela_titulo_baralho
                 if alterar_titulo_baralho.value and alterar_desc_baralho.value:
                     cursor.execute('update baralhos set nome_baralho = %s, desc_baralho = %s where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
                     
@@ -395,6 +396,7 @@ def main(page: ft.Page):
                     container_desc_baralho.content = ft.Text(f'Descrição: \n{descricao_baralho}', size=18, color='white')
 
                     titulo_baralho = alterar_titulo_baralho.value
+                    tela_titulo_baralho.value = titulo_baralho
 
                 elif alterar_titulo_baralho.value and not alterar_desc_baralho.value:
                     cursor.execute('update baralhos set nome_baralho = %s where cod_baralho = %s', (alterar_titulo_baralho.value, cod_baralho_clicado))
@@ -539,6 +541,7 @@ def main(page: ft.Page):
 
     usuario_logado = 1
     titulo_baralho = ''
+    tela_titulo_baralho = ft.Text(titulo_baralho, size=28)
     descricao_baralho = ''
     cod_baralho_clicado = ''
 
