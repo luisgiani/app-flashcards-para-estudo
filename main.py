@@ -87,10 +87,10 @@ def main(page: ft.Page):
                         ft.Row(controls=[
                             voltar_baralho, titulo_iniciar_estudos
                         ]),
-                        ft.Column(controls=[
-                            ft.Text('Pergunta 1'),
-                        ])
-                    ]
+                        coluna_estudo
+                    ],
+                    vertical_alignment='center',
+                    horizontal_alignment='center'
                 )
             )
 
@@ -547,8 +547,26 @@ def main(page: ft.Page):
             print(retorno[1])
 
             for card in retorno:
-                i += 1
+                coluna_estudo.controls.clear()
+                i = 1
+
+                container_card = ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(f'Pergunta {i}', size=24, color='white'),
+                            ft.Text(card[0])
+                        ]
+                    ),
+                    border_radius=10,
+                    border=ft.border.all(1,'white')
+                )
+            
                 print(f'card {i}: pergunta {card[0]} resposta {card[1]}')
+                coluna_estudo.controls.append(container_card)
+
+                i += 1
+
+                page.update()
                 
 
         puxar_cards(e)
@@ -558,6 +576,13 @@ def main(page: ft.Page):
     tela_titulo_baralho = ft.Text(titulo_baralho, size=28)
     descricao_baralho = ''
     cod_baralho_clicado = ''
+
+    coluna_estudo = ft.Column(
+        controls=[],
+        expand=True,
+        spacing=15,
+        horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+    )
 
     alterar_titulo_baralho = ft.TextField(
         label='Novo título (Preencha os campos que deseja alterar)',
