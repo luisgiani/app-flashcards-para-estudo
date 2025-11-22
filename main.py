@@ -79,6 +79,7 @@ def main(page: ft.Page):
                 )
             )
         elif page.route == '/principal/baralho/iniciar_estudos':
+            iniciar_estudo(e)
             page.views.append(
                 ft.View(
                     '/principal/baralho/iniciar_estudos',
@@ -538,7 +539,19 @@ def main(page: ft.Page):
         page.update()
 
     def iniciar_estudo(e):
-        pass
+        def puxar_cards(e):
+            cursor.execute('select pergunta, resposta from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
+            retorno = cursor.fetchall()
+            print(retorno)
+            print(retorno[0])
+            print(retorno[1])
+
+            for card in retorno:
+                i += 1
+                print(f'card {i}: pergunta {card[0]} resposta {card[1]}')
+                
+
+        puxar_cards(e)
 
     usuario_logado = 1
     titulo_baralho = ''
