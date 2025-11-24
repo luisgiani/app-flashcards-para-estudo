@@ -539,8 +539,7 @@ def main(page: ft.Page):
         page.update()
 
     def iniciar_estudo(e):
-        nonlocal cards_estudo
-        indice = 1
+        nonlocal cards_estudo, indice
 
         def puxar_cards(e):
             cursor.execute('select pergunta, resposta from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
@@ -548,7 +547,8 @@ def main(page: ft.Page):
             print(cards_estudo)
 
         def exibir_card(e):
-
+            def mostrar_resposta(e):
+                pass
 
 
             for card in cards_estudo:
@@ -565,12 +565,14 @@ def main(page: ft.Page):
                     border=ft.border.all(1,'white')
                 )
             
-                print(f'card {indice}: pergunta {card[0]} resposta {card[1]}')
+                print(f'card {indice}: pergunta {card[indice]} resposta {card[int(indice + 1)]}')
                 coluna_estudo.controls.append(container_card)
 
                 indice += 1                
 
         puxar_cards(e)
+
+
 
     usuario_logado = 1
     titulo_baralho = ''
@@ -578,6 +580,9 @@ def main(page: ft.Page):
     descricao_baralho = ''
     cod_baralho_clicado = ''
     cards_estudo = []
+    indice = 1
+    botao_resposta = ft.ElevatedButton("Mostrar Resposta", on_click=mostrar_resposta)
+    texto_resposta = ft.Text("", size=20, color='white', text_align='center', visible=False)
 
     coluna_estudo = ft.Column(
         controls=[],
