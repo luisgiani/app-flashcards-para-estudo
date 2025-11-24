@@ -547,32 +547,29 @@ def main(page: ft.Page):
             print(cards_estudo)
 
         def exibir_card(e):
-            def mostrar_resposta(e):
-                pass
+            coluna_estudo.controls.clear()
 
-
-            for card in cards_estudo:
-                coluna_estudo.controls.clear()
-
-                container_card = ft.Container(
-                    content=ft.Column(
-                        controls=[
-                            ft.Text(f'Pergunta {indice}', size=24, color='white'),
-                            ft.Text(card[0])
-                        ]
-                    ),
-                    border_radius=10,
-                    border=ft.border.all(1,'white')
-                )
+            container_card = ft.Container(
+                content=ft.Column(
+                    controls=[
+                        ft.Text(f'Pergunta {indice}', size=24, color='white'),
+                        ft.Text(card[0])
+                    ]
+                ),
+                border_radius=10,
+                border=ft.border.all(1,'white')
+            )
             
-                print(f'card {indice}: pergunta {card[indice]} resposta {card[int(indice + 1)]}')
-                coluna_estudo.controls.append(container_card)
+            print(f'card {indice}: pergunta {card[indice]} resposta {card[int(indice + 1)]}')
+            coluna_estudo.controls.append(container_card)
 
-                indice += 1                
+            indice += 1                
 
         puxar_cards(e)
 
-
+    def mostrar_resposta(e):
+        texto_resposta.visible = True
+        page.update()
 
     usuario_logado = 1
     titulo_baralho = ''
@@ -581,8 +578,19 @@ def main(page: ft.Page):
     cod_baralho_clicado = ''
     cards_estudo = []
     indice = 1
-    botao_resposta = ft.ElevatedButton("Mostrar Resposta", on_click=mostrar_resposta)
-    texto_resposta = ft.Text("", size=20, color='white', text_align='center', visible=False)
+
+    botao_resposta = ft.ElevatedButton(
+        "Mostrar Resposta", 
+        on_click=lambda _:mostrar_resposta
+        )
+    
+    texto_resposta = ft.Text(
+        "", 
+        size=20, 
+        color='white', 
+        text_align='center', 
+        visible=False
+        )
 
     coluna_estudo = ft.Column(
         controls=[],
