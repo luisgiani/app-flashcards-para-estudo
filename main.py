@@ -560,19 +560,21 @@ def main(page: ft.Page):
         def finalizar_estudo(e):
             coluna_estudo.controls.clear()
             coluna_estudo.controls.append(ft.Text("Estudo concluído!", size=24, color='white'))
+            coluna_estudo.controls.append(botao_finalizar_estudo)
             page.update()
 
         def exibir_card(e):
             nonlocal indice
+
+            if indice >= len(cards_estudo):
+                finalizar_estudo(e)
+                return
+
             coluna_estudo.controls.clear()
             texto_resposta.visible = False
 
             numero_pergunta = indice + 1
             texto_resposta.value = cards_estudo[indice][1]
-
-            if indice >= len(cards_estudo):
-                finalizar_estudo(e)
-                return
 
             container_pergunta = ft.Container(
                 content=ft.Column(
@@ -595,18 +597,18 @@ def main(page: ft.Page):
                 padding=10
             )
 
-            botao_proximo_card = ft.ElevatedButton(
-                "Próxima Pergunta",
-                on_click=exibir_card
-                )
-
             coluna_estudo.controls.append(container_pergunta)
             coluna_estudo.controls.append(container_resposta)
             coluna_estudo.controls.append(botao_resposta)
             coluna_estudo.controls.append(botao_proximo_card)
 
             indice += 1
-            page.update()                
+            page.update()      
+
+        botao_proximo_card = ft.ElevatedButton(
+            "Próxima Pergunta",
+            on_click=exibir_card
+            )          
 
         limpar_variaveis(e)
         puxar_cards(e)
@@ -615,6 +617,11 @@ def main(page: ft.Page):
     def mostrar_resposta(e):
         texto_resposta.visible = not texto_resposta.visible
         page.update()
+
+    botao_finalizar_estudo = ft.TextButton(
+        "Finalizar Estudo", 
+        on_click=lambda _: page.go('/principal/baralho')
+    )
 
     tela_titulo_baralho = ft.Text(
         titulo_baralho, 
