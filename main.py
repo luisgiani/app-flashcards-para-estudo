@@ -32,6 +32,13 @@ def main(page: ft.Page):
     page.spacing = 20
     page.vertical_alignment = 'center'
     page.horizontal_alignment = 'center'
+    
+    usuario_logado = 1
+    titulo_baralho = ''
+    descricao_baralho = ''
+    cod_baralho_clicado = ''
+    cards_estudo = []
+    indice = 0
 
     def mudar_tela(e):
         page.views.clear()
@@ -539,54 +546,76 @@ def main(page: ft.Page):
         page.update()
 
     def iniciar_estudo(e):
-        nonlocal cards_estudo, indice
-
         def puxar_cards(e):
+            nonlocal cards_estudo
             cursor.execute('select pergunta, resposta from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
             cards_estudo = cursor.fetchall()
             print(cards_estudo)
 
         def exibir_card(e):
+            nonlocal indice
             coluna_estudo.controls.clear()
+            texto_resposta.visible = False
 
-            container_card = ft.Container(
+            numero_pergunta = indice + 1
+            texto_resposta.value = cards_estudo[indice][1]
+
+            container_pergunta = ft.Container(
                 content=ft.Column(
                     controls=[
-                        ft.Text(f'Pergunta {indice}', size=24, color='white'),
-                        ft.Text(card[0])
+                        ft.Text(f'Pergunta {numero_pergunta}', size=28, color='white'),
+                        ft.Text(cards_estudo[indice][0], size=26, color='white', text_align='center')
                     ]
                 ),
                 border_radius=10,
-                border=ft.border.all(1,'white')
+                border=ft.border.all(1,'white'),
+                margin=10,
+                padding=10
             )
             
-            print(f'card {indice}: pergunta {card[indice]} resposta {card[int(indice + 1)]}')
-            coluna_estudo.controls.append(container_card)
+            container_resposta = ft.Container(
+                content=texto_resposta,
+                border_radius= 10,
+                border=ft.border.all(1,'white'),
+                margin=10,
+                padding=10
+            )
 
-            indice += 1                
+            botao_proximo_card = ft.ElevatedButton(
+                "Próxima Pergunta",
+                on_click=exibir_card
+                )
+
+            coluna_estudo.controls.append(container_pergunta)
+            coluna_estudo.controls.append(container_resposta)
+            coluna_estudo.controls.append(botao_resposta)
+            coluna_estudo.controls.append(botao_proximo_card)
+
+            indice += 1
+            page.update()                
 
         puxar_cards(e)
+        exibir_card(e)
 
     def mostrar_resposta(e):
         texto_resposta.visible = True
         page.update()
 
-    usuario_logado = 1
-    titulo_baralho = ''
-    tela_titulo_baralho = ft.Text(titulo_baralho, size=28)
-    descricao_baralho = ''
-    cod_baralho_clicado = ''
-    cards_estudo = []
-    indice = 1
+    
+
+    tela_titulo_baralho = ft.Text(
+        titulo_baralho, 
+        size=28
+        )
 
     botao_resposta = ft.ElevatedButton(
         "Mostrar Resposta", 
-        on_click=lambda _:mostrar_resposta
+        on_click=mostrar_resposta
         )
     
     texto_resposta = ft.Text(
         "", 
-        size=20, 
+        size=24, 
         color='white', 
         text_align='center', 
         visible=False
