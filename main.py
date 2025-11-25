@@ -37,6 +37,7 @@ def main(page: ft.Page):
     titulo_baralho = ''
     descricao_baralho = ''
     cod_baralho_clicado = ''
+    cod_card_clicado = ''
     cards_estudo = []
     indice = 0
 
@@ -309,6 +310,8 @@ def main(page: ft.Page):
                 on_click= lambda _: editar_card(e)
             )
 
+            flashcard.data = card[0]
+
             lista_cards.controls.append(flashcard)
 
         if not lista_flashcards:
@@ -391,7 +394,69 @@ def main(page: ft.Page):
         page.update()
 
     def editar_card(e):
-        pass
+        try:
+            nonlocal cod_card_clicado
+            cod_card_clicado = e.control.data
+
+            def alerta_sucesso(e):
+                pass
+            
+            def alerta_cancelado(e):
+                alerta_card_novo.open = False
+                page.update()
+            
+            alerta_card_novo = ft.AlertDialog(
+                title=ft.Text('Editar flashcard'),
+                content= ft.Container(
+                    content=ft.Column(controls=[
+                        pergunta_card, 
+                        resposta_card, 
+                        ft.Row(controls=[
+                            ft.Container(content=ft.TextButton(
+                                        'Salvar Alterações',
+                                        on_click= lambda _: alerta_sucesso(e)
+                                        ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1
+                                    ),
+                            ft.Container(content=ft.TextButton(
+                                        'Cancelar',
+                                        on_click= lambda _: alerta_cancelado(e)
+                                        ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1
+                                    ),
+                            ft.Container(content=ft.TextButton(
+                                        'Excluir card',
+                                        on_click= lambda _: alerta_cancelado(e)
+                                        ),
+                                    border=ft.border.all(1,'white'),
+                                    border_radius=10,
+                                    expand=1
+                                    ),
+
+                        ])
+                    ]),
+                    height= 200,
+                    width= 400
+                ),
+            )
+
+            page.open(alerta_card_novo)
+
+        except Exception as error:
+            print(f"Erro no processo: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+            page.open(snackbar)
+
+        page.update()
 
     def editar_baralho(e):
         try:
