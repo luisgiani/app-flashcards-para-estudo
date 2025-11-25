@@ -552,6 +552,11 @@ def main(page: ft.Page):
             cards_estudo = cursor.fetchall()
             print(cards_estudo)
 
+        def finalizar_estudo(e):
+            coluna_estudo.controls.clear()
+            coluna_estudo.controls.append(ft.Text("Estudo concluído!", size=24, color='white'))
+            page.update()
+
         def exibir_card(e):
             nonlocal indice
             coluna_estudo.controls.clear()
@@ -559,6 +564,10 @@ def main(page: ft.Page):
 
             numero_pergunta = indice + 1
             texto_resposta.value = cards_estudo[indice][1]
+
+            if indice >= len(cards_estudo):
+                finalizar_estudo(e)
+                return
 
             container_pergunta = ft.Container(
                 content=ft.Column(
