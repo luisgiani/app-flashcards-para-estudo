@@ -546,6 +546,11 @@ def main(page: ft.Page):
         page.update()
 
     def iniciar_estudo(e):
+        def limpar_variaveis(e):
+            nonlocal indice
+            indice = 0
+            coluna_estudo.controls.clear()
+
         def puxar_cards(e):
             nonlocal cards_estudo
             cursor.execute('select pergunta, resposta from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
@@ -603,6 +608,7 @@ def main(page: ft.Page):
             indice += 1
             page.update()                
 
+        limpar_variaveis(e)
         puxar_cards(e)
         exibir_card(e)
 
