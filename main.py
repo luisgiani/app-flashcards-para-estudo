@@ -598,10 +598,8 @@ def main(page: ft.Page):
         exibir_card(e)
 
     def mostrar_resposta(e):
-        texto_resposta.visible = True
+        texto_resposta.visible = not texto_resposta.visible
         page.update()
-
-    
 
     tela_titulo_baralho = ft.Text(
         titulo_baralho, 
@@ -609,7 +607,7 @@ def main(page: ft.Page):
         )
 
     botao_resposta = ft.ElevatedButton(
-        "Mostrar Resposta", 
+        "Mostrar/Ocultar Resposta", 
         on_click=mostrar_resposta
         )
     
