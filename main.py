@@ -409,8 +409,8 @@ def main(page: ft.Page):
                 title=ft.Text('Editar flashcard'),
                 content= ft.Container(
                     content=ft.Column(controls=[
-                        pergunta_card, 
-                        resposta_card, 
+                        alterar_pergunta_card, 
+                        alterar_resposta_card, 
                         ft.Row(controls=[
                             ft.Container(content=ft.TextButton(
                                         'Salvar Alterações',
@@ -682,6 +682,20 @@ def main(page: ft.Page):
     def mostrar_resposta(e):
         texto_resposta.visible = not texto_resposta.visible
         page.update()
+
+    alterar_pergunta_card = ft.TextField(
+        label='Alterar pergunta do card (Preencha os campos que deseja alterar)',
+        text_size=24,
+        border_color='white',
+        border_radius=15  
+    )
+
+    alterar_resposta_card = ft.TextField(
+        label='Alterar resposta do card (Preencha os campos que deseja alterar)',
+        text_size=24,
+        border_color='white',
+        border_radius=15  
+    )
 
     botao_finalizar_estudo = ft.TextButton(
         "Finalizar Estudo", 
