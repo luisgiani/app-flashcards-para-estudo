@@ -1030,11 +1030,6 @@ def main(page: ft.Page):
                 ), 
             border_radius=10
         )
-    
-    #criar uma aba de planejamento, onde é definido o tempo dos cards a serem revisados
-    #na barra lateral vão ter as abas de usuário, planejamento e estudos(baralhos)
-    barra_lateral = ft.NavigationRail()
-
 
     page.go('/login')
 
