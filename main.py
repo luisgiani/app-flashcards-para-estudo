@@ -177,8 +177,6 @@ def main(page: ft.Page):
         retorno = cursor.fetchone()
         stats_cards.value = retorno[0]
 
-        #fazer parte de revisão
-
     def listar_baralhos(e):
         cursor.execute('select * from baralhos where id_usuario = %s order by nome_baralho',(usuario_logado,))
         lista_baralhos = cursor.fetchall()
@@ -1016,23 +1014,6 @@ def main(page: ft.Page):
                         horizontal_alignment='center'
                     ),
                     bgcolor='green',
-                    padding=15,
-                    expand= 1,
-                    border_radius=10,
-                ),
-                ft.Container(
-                    content=ft.Column(
-                        controls=[
-                            stats_revisar,
-                            ft.Text(
-                                'Para Revisar', 
-                                size=14
-                                )
-                        ],
-                        alignment= 'center',
-                        horizontal_alignment='center'
-                    ),
-                    bgcolor='red',
                     padding=15,
                     expand= 1,
                     border_radius=10,
