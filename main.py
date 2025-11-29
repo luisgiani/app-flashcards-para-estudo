@@ -472,7 +472,18 @@ def main(page: ft.Page):
             alterar_titulo_baralho.value = ''
             alterar_desc_baralho.value = ''
             page.open(sucesso)
-            page.update()
+
+        except Exception as error:
+            print(f"Erro no processo: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+            page.open(snackbar)         
+
+        page.update()   
 
 
     def editar_baralho(e):
