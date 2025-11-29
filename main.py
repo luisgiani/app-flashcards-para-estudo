@@ -1,6 +1,7 @@
 import flet as ft
 import pyrebase
 import mysql.connector
+import random
 
 firebaseConfig = {
   'apiKey': "AIzaSyAd6Aw-9lhIr2FLFeeM-x2cn_6QJ5Z8OGg",
@@ -428,7 +429,7 @@ def main(page: ft.Page):
                                     ),
                             ft.Container(content=ft.TextButton(
                                         'Excluir card',
-                                        on_click= lambda _: alerta_cancelado(e)
+                                        on_click= lambda _: excluir_card(e)
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
@@ -455,6 +456,24 @@ def main(page: ft.Page):
             page.open(snackbar)
 
         page.update()
+
+    def excluir_card(e):
+        try:
+            cursor.execute('delete from flashcards where cod_flashcards = %s',(cod_card_clicado,))
+            conexao.commit()
+
+            sucesso = ft.SnackBar(content=ft.Text("Baralho atualizado com sucesso!"),
+                        bgcolor="green",
+                        duration=3000,
+                        action="OK"
+                    )
+
+            alerta_edicao.open = False
+            alterar_titulo_baralho.value = ''
+            alterar_desc_baralho.value = ''
+            page.open(sucesso)
+            page.update()
+
 
     def editar_baralho(e):
         try:
@@ -618,7 +637,7 @@ def main(page: ft.Page):
             nonlocal cards_estudo
             cursor.execute('select pergunta, resposta from flashcards where cod_baralho = %s', (cod_baralho_clicado,))
             cards_estudo = cursor.fetchall()
-            print(cards_estudo)
+            random.shuffle(cards_estudo)
 
         def finalizar_estudo(e):
             coluna_estudo.controls.clear()
