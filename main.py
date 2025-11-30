@@ -393,6 +393,34 @@ def main(page: ft.Page):
         page.update()
 
     def editar_card(e):
+        def excluir_card(e):
+            try:
+                cursor.execute('delete from flashcards where cod_flashcards = %s',(cod_card_clicado,))
+                conexao.commit()
+
+                sucesso = ft.SnackBar(content=ft.Text("Card excluído com sucesso!"),
+                            bgcolor="green",
+                            duration=3000,
+                            action="OK"
+                        )
+
+                alerta_card_novo.open = False
+                alterar_titulo_baralho.value = ''
+                alterar_desc_baralho.value = ''
+                page.open(sucesso)
+
+            except Exception as error:
+                print(f"Erro no processo: {error}")
+                snackbar = ft.SnackBar(
+                    content=ft.Text(f"Erro: {str(error)}"),
+                    bgcolor="red",
+                    duration=10000,
+                    action="OK"
+                )
+                page.open(snackbar)         
+
+            page.update()   
+
         try:
             nonlocal cod_card_clicado
             cod_card_clicado = e.control.data
@@ -456,35 +484,6 @@ def main(page: ft.Page):
             page.open(snackbar)
 
         page.update()
-
-    def excluir_card(e):
-        try:
-            cursor.execute('delete from flashcards where cod_flashcards = %s',(cod_card_clicado,))
-            conexao.commit()
-
-            sucesso = ft.SnackBar(content=ft.Text("Baralho atualizado com sucesso!"),
-                        bgcolor="green",
-                        duration=3000,
-                        action="OK"
-                    )
-
-            alerta_edicao.open = False
-            alterar_titulo_baralho.value = ''
-            alterar_desc_baralho.value = ''
-            page.open(sucesso)
-
-        except Exception as error:
-            print(f"Erro no processo: {error}")
-            snackbar = ft.SnackBar(
-                content=ft.Text(f"Erro: {str(error)}"),
-                bgcolor="red",
-                duration=10000,
-                action="OK"
-            )
-            page.open(snackbar)         
-
-        page.update()   
-
 
     def editar_baralho(e):
         try:
