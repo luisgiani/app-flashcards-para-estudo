@@ -306,7 +306,7 @@ def main(page: ft.Page):
             flashcard = ft.Container(
                 content=ft.Text(card[2], size=16),
                 ink=True,
-                on_click= lambda _: editar_card(e)
+                on_click= lambda _:editar_card(e)
             )
 
             flashcard.data = card[0]
@@ -396,6 +396,16 @@ def main(page: ft.Page):
         nonlocal cod_card_clicado
         cod_card_clicado = e.control.data
 
+        cursor.execute('select pergunta, resposta from flashcards where cod_flashcard = %s', (cod_card_clicado,))
+        card_atual = cursor.fetchone()
+        
+        if card_atual:
+            alterar_pergunta_card.value = card_atual[0]
+            alterar_resposta_card.value = card_atual[1]
+        else:
+            alterar_pergunta_card.value = ''
+            alterar_resposta_card.value = ''
+
         def excluir_card(e):
             try:
                 cursor.execute('delete from flashcards where cod_flashcard = %s',(cod_card_clicado,))
@@ -426,8 +436,7 @@ def main(page: ft.Page):
 
             def alerta_sucesso(e):
                 try:
-                    cursor.execute('update flashcards set pergunta = %s, resposta = %s where cod_flashcard = %s', 
-                                (alterar_pergunta_card.value, alterar_resposta_card.value, cod_card_clicado))
+                    cursor.execute('update flashcards set pergunta = %s, resposta = %s where cod_flashcard = %s', (alterar_pergunta_card.value, alterar_resposta_card.value, cod_card_clicado))
                     conexao.commit()
                     
                     snackbar = ft.SnackBar(
