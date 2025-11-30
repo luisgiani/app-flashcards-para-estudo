@@ -306,7 +306,7 @@ def main(page: ft.Page):
             flashcard = ft.Container(
                 content=ft.Text(card[2], size=16),
                 ink=True,
-                on_click= lambda _:editar_card(e)
+                on_click= editar_card
             )
 
             flashcard.data = card[0]
@@ -393,50 +393,24 @@ def main(page: ft.Page):
         page.update()
 
     def editar_card(e):
-        nonlocal cod_card_clicado
-        cod_card_clicado = e.control.data
+        try:
+            nonlocal cod_card_clicado
+            cod_card_clicado = e.control.data
 
-        cursor.execute('select pergunta, resposta from flashcards where cod_flashcard = %s', (cod_card_clicado,))
-        card_atual = cursor.fetchone()
-        
-        if card_atual:
-            alterar_pergunta_card.value = card_atual[0]
-            alterar_resposta_card.value = card_atual[1]
-        else:
-            alterar_pergunta_card.value = ''
-            alterar_resposta_card.value = ''
+            cursor.execute('select pergunta, resposta from flashcards where cod_flashcard = %s', (cod_card_clicado,))
+            card_atual = cursor.fetchone()
+            
+            if card_atual:
+                alterar_pergunta_card.value = card_atual[0]
+                alterar_resposta_card.value = card_atual[1]
+            else:
+                alterar_pergunta_card.value = ''
+                alterar_resposta_card.value = ''
 
-        def excluir_card(e):
-            try:
-                cursor.execute('delete from flashcards where cod_flashcard = %s',(cod_card_clicado,))
-                conexao.commit()
-
-                sucesso = ft.SnackBar(content=ft.Text("Card excluído com sucesso!"),
-                            bgcolor="green",
-                            duration=3000,
-                            action="OK"
-                        )
-
-                alerta_card_novo.open = False
-                alterar_titulo_baralho.value = ''
-                alterar_desc_baralho.value = ''
-                page.open(sucesso)
-
-            except Exception as error:
-                print(f"Erro no processo: {error}")
-                snackbar = ft.SnackBar(
-                    content=ft.Text(f"Erro: {str(error)}"),
-                    bgcolor="red",
-                    duration=10000,
-                    action="OK"
-                )
-                page.open(snackbar)         
-
-            page.update()   
-
-            def alerta_sucesso(e):
+            def salvar_alteracoes(e):
                 try:
-                    cursor.execute('update flashcards set pergunta = %s, resposta = %s where cod_flashcard = %s', (alterar_pergunta_card.value, alterar_resposta_card.value, cod_card_clicado))
+                    cursor.execute('update flashcards set pergunta = %s, resposta = %s where cod_flashcard = %s', 
+                                (alterar_pergunta_card.value, alterar_resposta_card.value, cod_card_clicado))
                     conexao.commit()
                     
                     snackbar = ft.SnackBar(
@@ -446,7 +420,7 @@ def main(page: ft.Page):
                         action="OK"
                     )
                     
-                    alerta_card_novo.open = False
+                    alerta_card_edicao.open = False
                     lista_cards.controls.clear()
                     listar_cards(e, cod_baralho_clicado)
                     page.open(snackbar)
@@ -461,21 +435,49 @@ def main(page: ft.Page):
                         action="OK"
                     )
                     page.open(snackbar)
-            
-            def alerta_cancelado(e):
-                alerta_card_novo.open = False
+
+            def excluir_card(e):
+                try:
+                    cursor.execute('delete from flashcards where cod_flashcard = %s', (cod_card_clicado,))
+                    conexao.commit()
+
+                    snackbar = ft.SnackBar(
+                        content=ft.Text("Card excluído com sucesso!"),
+                        bgcolor="green",
+                        duration=3000,
+                        action="OK"
+                    )
+                    
+                    alerta_card_edicao.open = False
+                    lista_cards.controls.clear()
+                    listar_cards(e, cod_baralho_clicado)
+                    page.open(snackbar)
+                    page.update()
+
+                except Exception as error:
+                    print(f"Erro ao excluir: {error}")
+                    snackbar = ft.SnackBar(
+                        content=ft.Text(f"Erro ao excluir: {str(error)}"),
+                        bgcolor="red",
+                        duration=10000,
+                        action="OK"
+                    )
+                    page.open(snackbar)
+
+            def cancelar_edicao(e):
+                alerta_card_edicao.open = False
                 page.update()
             
-            alerta_card_novo = ft.AlertDialog(
+            alerta_card_edicao = ft.AlertDialog(
                 title=ft.Text('Editar flashcard'),
-                content= ft.Container(
+                content=ft.Container(
                     content=ft.Column(controls=[
                         alterar_pergunta_card, 
                         alterar_resposta_card, 
                         ft.Row(controls=[
                             ft.Container(content=ft.TextButton(
                                         'Salvar Alterações',
-                                        on_click= lambda _: alerta_sucesso(e)
+                                        on_click=salvar_alteracoes
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
@@ -483,7 +485,7 @@ def main(page: ft.Page):
                                     ),
                             ft.Container(content=ft.TextButton(
                                         'Cancelar',
-                                        on_click= lambda _: alerta_cancelado(e)
+                                        on_click=cancelar_edicao
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
@@ -491,25 +493,31 @@ def main(page: ft.Page):
                                     ),
                             ft.Container(content=ft.TextButton(
                                         'Excluir card',
-                                        on_click= lambda _: excluir_card(e)
+                                        on_click=excluir_card
                                         ),
                                     border=ft.border.all(1,'white'),
                                     border_radius=10,
                                     expand=1
                                     ),
-
                         ])
                     ]),
-                    height= 200,
-                    width= 400
+                    height=200,
+                    width=400
                 ),
             )
 
-            page.open(alerta_card_novo)
+            page.open(alerta_card_edicao)
+            page.update()
 
-        lista_cards.controls.clear()
-        listar_cards(e,cod_baralho_clicado)
-        page.update()
+        except Exception as error:
+            print(f"Erro no processo de edição: {error}")
+            snackbar = ft.SnackBar(
+                content=ft.Text(f"Erro: {str(error)}"),
+                bgcolor="red",
+                duration=10000,
+                action="OK"
+            )
+            page.open(snackbar)
 
     def editar_baralho(e):
         try:
