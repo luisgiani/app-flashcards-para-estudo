@@ -184,26 +184,27 @@ def main(page: ft.Page):
         grid_baralhos.controls.append(container_novo_baralho)
 
         gradientes = [
-            ['#FF9A9E', '#FAD0C4'], 
-            ['#A1C4FD', '#C2E9FB'], 
-            ['#FFECD2', '#FCB69F'], 
-            ['#84FAB0', '#8FD3F4'],  
-            ['#D4FC79', '#96E6A1'],  
-            ['#FDCBF1', '#E6DEE9'],  
-            ['#A3BFFA', '#6991C7'], 
-            ['#FF9A8B', '#FF6A88'], 
-            ['#FFECD2', '#FF9A9E'],  
-            ['#43CBFF', '#9708CC'],  
-            ['#FFD89B', '#19547B'], 
-            ['#93F9B9', '#1D976C'],  
-            ['#FAD7A1', '#E96D71'],  
-            ['#A8EDEA', '#FED6E3'],  
-            ['#D9AFD9', '#97D9E1'],  
-            ['#FFC3A0', '#FFAFBD'], 
-            ['#8EC5FC', '#E0C3FC'], 
-            ['#FFDEE9', '#B5FFFC'],  
-            ['#FAACA8', '#DDD6F3'],  
-            ['#F6D365', '#FDA085']]
+            ['#2C3E50', '#4A6491'],  
+            ['#283048', '#859398'],  
+            ['#232526', '#414345'],  
+            ['#1A2980', '#26D0CE'],  
+            ['#4776E6', '#8E54E9'],  
+            ['#114357', '#F29492'],  
+            ['#1D2B64', '#F8CDDA'],  
+            ['#614385', '#516395'], 
+            ['#16222A', '#3A6073'],  
+            ['#200122', '#6F0000'],  
+            ['#141E30', '#243B55'],  
+            ['#3C3B3F', '#605C3C'],  
+            ['#0F2027', '#203A43'],  
+            ['#1C1C1C', '#4A4A4A'],  
+            ['#2B5876', '#4E4376'],  
+            ['#134E5E', '#71B280'],  
+            ['#373B44', '#4286F4'],  
+            ['#1A1A2E', '#16213E'],  
+            ['#0F0C29', '#302B63'],  
+            ['#000000', '#434343']   
+        ]
 
         for baralho in lista_baralhos:
             gradiente_index = baralho[0] % len(gradientes)
@@ -1094,13 +1095,18 @@ def main(page: ft.Page):
                             stats_baralho,
                             ft.Text(
                                 'Baralhos', 
-                                size=14
-                                )
+                                size=14,
+                                color='white' 
+                            )
                         ],
                         alignment= 'center',
                         horizontal_alignment='center'
                     ),
-                    bgcolor='blue',
+                    gradient=ft.LinearGradient(
+                        begin=ft.alignment.top_left,
+                        end=ft.alignment.bottom_right,
+                        colors=['#2C3E50', '#4A6491'] 
+                    ),
                     padding=15,
                     expand= 1,
                     border_radius=10,
@@ -1111,13 +1117,18 @@ def main(page: ft.Page):
                             stats_cards,
                             ft.Text(
                                 'Cards', 
-                                size=14
-                                )
+                                size=14,
+                                color='white' 
+                            )
                         ],
                         alignment= 'center',
                         horizontal_alignment='center'
                     ),
-                    bgcolor='green',
+                    gradient=ft.LinearGradient(
+                        begin=ft.alignment.top_left,
+                        end=ft.alignment.bottom_right,
+                        colors=['#1A2980', "#3336E4"]  
+                    ),
                     padding=15,
                     expand= 1,
                     border_radius=10,
