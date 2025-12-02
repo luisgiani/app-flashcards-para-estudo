@@ -183,12 +183,40 @@ def main(page: ft.Page):
         lista_baralhos = cursor.fetchall()
         grid_baralhos.controls.append(container_novo_baralho)
 
+        gradientes = [
+            ['#FF9A9E', '#FAD0C4'], 
+            ['#A1C4FD', '#C2E9FB'], 
+            ['#FFECD2', '#FCB69F'], 
+            ['#84FAB0', '#8FD3F4'],  
+            ['#D4FC79', '#96E6A1'],  
+            ['#FDCBF1', '#E6DEE9'],  
+            ['#A3BFFA', '#6991C7'], 
+            ['#FF9A8B', '#FF6A88'], 
+            ['#FFECD2', '#FF9A9E'],  
+            ['#43CBFF', '#9708CC'],  
+            ['#FFD89B', '#19547B'], 
+            ['#93F9B9', '#1D976C'],  
+            ['#FAD7A1', '#E96D71'],  
+            ['#A8EDEA', '#FED6E3'],  
+            ['#D9AFD9', '#97D9E1'],  
+            ['#FFC3A0', '#FFAFBD'], 
+            ['#8EC5FC', '#E0C3FC'], 
+            ['#FFDEE9', '#B5FFFC'],  
+            ['#FAACA8', '#DDD6F3'],  
+            ['#F6D365', '#FDA085']]
+
         for baralho in lista_baralhos:
+            gradiente_index = baralho[0] % len(gradientes)
+            gradiente_escolhido = gradientes[gradiente_index]
+
             container_baralho = ft.Container(
                 content= ft.Text(baralho[2], size=18),
                 height=200,
                 width=200,
-                bgcolor='blue',
+                gradient=ft.LinearGradient(
+                begin=ft.alignment.top_left,
+                end=ft.alignment.bottom_right,
+                colors=gradiente_escolhido),
                 border_radius= 30,
                 alignment= ft.alignment.center,
                 ink=True,
@@ -1008,15 +1036,27 @@ def main(page: ft.Page):
     )
 
     container_novo_baralho = ft.Container(
-        content=ft.Icon(name='ADD', size=50),
+        content=ft.Column(
+            controls=[
+                ft.Icon(name='ADD', size=50, color='white'),
+                ft.Text('Novo Baralho', size=14, color='white', text_align='center')
+            ],
+            alignment='center',
+            horizontal_alignment='center'
+        ),
         height=200,
         width=200,
         bgcolor='2A2A2A',
-        border_radius= 30,
+        border_radius=30,
         ink=True,
         on_click=adicionar_baralho,
-        alignment= ft.alignment.center,
-        border= ft.border.all(1, color='white')
+        alignment=ft.alignment.center,
+        border=ft.border.all(1, color='white'),
+        gradient=ft.LinearGradient(
+            begin=ft.alignment.top_left,
+            end=ft.alignment.bottom_right,
+            colors=['#2A2A2A', '#4A4A4A']
+        )
     )
 
     grid_baralhos = ft.GridView(
