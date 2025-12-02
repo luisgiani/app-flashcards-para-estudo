@@ -72,7 +72,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        ft.Row(controls=[titulo_principal, ft.Text(f'meu usuário atual é : {usuario_logado}', color='white')]), stats_inicio, pesquisa, grid_baralhos
+                        titulo_principal, stats_inicio, pesquisa, grid_baralhos
                     ]
                 )
             )
@@ -523,6 +523,7 @@ def main(page: ft.Page):
         try:
             def salvar_alteracoes(e):
                 nonlocal descricao_baralho, titulo_baralho
+
                 if alterar_titulo_baralho.value and alterar_desc_baralho.value:
                     cursor.execute('update baralhos set nome_baralho = %s, desc_baralho = %s where cod_baralho = %s',(alterar_titulo_baralho.value,alterar_desc_baralho.value, cod_baralho_clicado))
                     
