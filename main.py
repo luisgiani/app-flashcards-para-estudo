@@ -909,13 +909,19 @@ def main(page: ft.Page):
     )
 
     container_desc_baralho = ft.Container(
-        content='',
+        content=ft.Column([
+            ft.Text('Descrição do Baralho', size=18, weight='bold', color='white'),
+            ft.Divider(height=1, color='#333333'),
+            ft.Container(
+                content=ft.Text('', size=14, color='#CCCCCC'),
+                padding=10
+            )
+        ]),
         padding=15,
-        bgcolor='#2A2A2A',
-        border=ft.border.all(1, 'white'),
+        bgcolor='#1E1E1E',
+        border=ft.border.all(1, '#333333'),
         border_radius=10,
-        margin=10,
-        expand=True
+        margin=10
     )
 
     botao_estudar = ft.IconButton(
