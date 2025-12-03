@@ -48,7 +48,7 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View('/login',
                         [
-                        titulo_login, email_login, senha_login, botao_login, voltar_registro, pular_login
+                        titulo_login, email_login, senha_login, botao_login, voltar_registro
                         ],
                         vertical_alignment= 'center',
                         horizontal_alignment= 'center'
@@ -72,7 +72,7 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal',
                     [
-                        titulo_principal, stats_inicio, pesquisa, grid_baralhos
+                        titulo_principal, stats_inicio, grid_baralhos
                     ]
                 )
             )
@@ -1082,11 +1082,6 @@ def main(page: ft.Page):
             on_click=lambda _: page.go('/login')
             )
     
-    pular_login = ft.TextButton(
-            text='Pular Login', 
-            on_click=lambda _: page.go('/principal')
-            )
-    
     titulo_principal = ft.Text(
         value='Meus Baralhos', 
         size= 40,
@@ -1193,15 +1188,6 @@ def main(page: ft.Page):
             ]
         ),
     )
-
-    pesquisa = ft.Container(
-        content=ft.TextField(
-                hint_text='Pesquisar Baralhos', 
-                prefix_icon=ft.Icons.SEARCH,
-                filled=True
-                ), 
-            border_radius=10
-        )
 
     page.go('/login')
 
