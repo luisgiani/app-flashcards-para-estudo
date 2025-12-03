@@ -81,10 +81,55 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        ft.Row(controls=[voltar_principal,ft.Text('Visualização do Baralho', weight='bold',size=26)]),
-                        ft.Container(content=ft.Row(controls=[ft.Text('Baralho: ', size=28), tela_titulo_baralho, icone_editar_baralho, icone_excluir_baralho], alignment='left',spacing=5), padding= 2),
-                        ft.Row(controls=[ft.Container(content=lista_cards, border=ft.border.all(1,'white'), border_radius=10, margin=10, padding=15, expand= True), coluna_visualizar_baralho], expand= True)
-                     ]
+                        # Cabeçalho melhorado
+                        ft.Container(
+                            content=ft.Column([
+                                ft.Row([
+                                    voltar_principal,
+                                    ft.Text('Visualização do Baralho', weight='bold', size=26, color='white')
+                                ]),
+                                ft.Row([
+                                    ft.Text('Baralho: ', size=22, color='white'),
+                                    tela_titulo_baralho,
+                                    icone_editar_baralho,
+                                    icone_excluir_baralho
+                                ], spacing=10)
+                            ], spacing=10),
+                            bgcolor='#1E1E1E',
+                            padding=20,
+                            border_radius=10,
+                            margin=10
+                        ),
+                        
+                        # Conteúdo principal
+                        ft.Row([
+                            # Lista de cards
+                            ft.Container(
+                                content=ft.Column([
+                                    ft.Text('Flashcards', size=20, weight='bold', color='white'),
+                                    ft.Container(
+                                        content=lista_cards,
+                                        border=ft.border.all(2, '#333333'),
+                                        border_radius=10,
+                                        padding=15,
+                                        expand=True,
+                                        bgcolor='#1E1E1E'
+                                    )
+                                ], spacing=10),
+                                expand=2,
+                                margin=10
+                            ),
+                            
+                            # Painel lateral
+                            ft.Container(
+                                content=coluna_visualizar_baralho,
+                                expand=1,
+                                margin=10
+                            )
+                        ], expand=True)
+                    ],
+                    padding=10,
+                    bgcolor='#121212'
                 )
             )
         elif page.route == '/principal/baralho/iniciar_estudos':
@@ -94,12 +139,14 @@ def main(page: ft.Page):
                     '/principal/baralho/iniciar_estudos',
                     [
                         ft.Row(controls=[
-                            voltar_baralho, titulo_iniciar_estudos
+                            voltar_baralho, 
+                            titulo_iniciar_estudos
                         ]),
                         coluna_estudo
                     ],
                     vertical_alignment='center',
-                    horizontal_alignment='center'
+                    horizontal_alignment='center',
+                    bgcolor='#121212'
                 )
             )
 
@@ -375,6 +422,8 @@ def main(page: ft.Page):
 
             def alerta_cancelado(e):
                 alerta_card_novo.open = False
+                pergunta_card.value = ''
+                resposta_card.value = ''
                 page.update()
             
             alerta_card_novo = ft.AlertDialog(
@@ -859,14 +908,6 @@ def main(page: ft.Page):
         border_radius=15
     )
 
-    botao_estudar = ft.IconButton(
-        icon=ft.Icons.PLAY_CIRCLE,
-        bgcolor= 'green',
-        icon_color='white',
-        scale=1,
-        on_click= lambda _: page.go('/principal/baralho/iniciar_estudos')
-    )
-
     container_desc_baralho = ft.Container(
         content='',
         padding=15,
@@ -877,23 +918,39 @@ def main(page: ft.Page):
         expand=True
     )
 
+    botao_estudar = ft.IconButton(
+        icon=ft.Icons.PLAY_CIRCLE_FILLED,
+        icon_color='white',
+        icon_size=36,
+        style=ft.ButtonStyle(
+            bgcolor='#4CAF50',
+            shape=ft.CircleBorder(),
+            padding=15
+        ),
+        on_click=lambda _: page.go('/principal/baralho/iniciar_estudos')
+    )
+
     container_iniciar_estudos = ft.Container(
-        content=ft.Column(controls=
-            [
-                ft.Text(
-                'Iniciar Estudos', 
-                size=24, 
-                color='white', 
-                text_align='center', 
-                weight='bold'
-                ), 
-                botao_estudar
-            ]),
-        border=ft.border.all(1,'white'), 
+        content=ft.Column([
+            ft.Text('Iniciar Estudos', size=18, weight='bold', color='white'),
+            ft.Divider(height=1, color='#333333'),
+            ft.Container(
+                content=ft.Column([
+                    ft.Text('Estude todos os flashcards deste baralho', size=14, color='#CCCCCC', text_align='center'),
+                    ft.Container(
+                        content=botao_estudar,
+                        alignment=ft.alignment.center,
+                        padding=10
+                    )
+                ], horizontal_alignment='center'),
+                padding=10
+            )
+        ]),
+        padding=15,
+        bgcolor='#1E1E1E',
+        border=ft.border.all(1, '#333333'),
         border_radius=10,
-        margin=10, 
-        padding=15, 
-        expand= True
+        margin=10
     )
 
     coluna_visualizar_baralho = ft.Column(
