@@ -81,7 +81,6 @@ def main(page: ft.Page):
                 ft.View(
                     '/principal/baralho',
                     [
-                        # Cabeçalho melhorado
                         ft.Container(
                             content=ft.Column([
                                 ft.Row([
@@ -100,10 +99,7 @@ def main(page: ft.Page):
                             border_radius=10,
                             margin=10
                         ),
-                        
-                        # Conteúdo principal
                         ft.Row([
-                            # Lista de cards
                             ft.Container(
                                 content=ft.Column([
                                     ft.Text('Flashcards', size=20, weight='bold', color='white'),
@@ -119,8 +115,6 @@ def main(page: ft.Page):
                                 expand=2,
                                 margin=10
                             ),
-                            
-                            # Painel lateral
                             ft.Container(
                                 content=coluna_visualizar_baralho,
                                 expand=1,
